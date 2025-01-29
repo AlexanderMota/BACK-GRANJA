@@ -56,35 +56,64 @@ src/
 
 1. Clona el repositorio:
 
-```bash  
-git clone https://github.com/AlexanderMota/back_todo_list_nodejs.git
+   ```bash
+   git clone https://github.com/AlexanderMota/back_todo_list_nodejs.git
+   
+2. Instala las dependencias:
 
-cd back_todo_list_nodejs  
-Instala las dependencias:
-bash
-Copy
-Edit
-npm install  
-Configura las variables de entorno:
+   ```bash
+   npm install
+
+3. Configura las variables de entorno:
+
 Crea un archivo .env en la raíz del proyecto con el siguiente contenido (ajusta según sea necesario):
-env
-Copy
-Edit
-PORT=3000  
-DB_HOST=localhost  
-DB_USER=root  
-DB_PASSWORD=yourpassword  
-DB_NAME=todo_list  
-JWT_SECRET=your_secret_key  
+
+ - PORT=3000  
+ - DB_HOST=localhost  
+ - DB_USER=root  
+ - DB_PASSWORD=yourpassword  
+ - DB_NAME=todo_list  
+ - JWT_SECRET=your_secret_key  
+
+4. Ejecuta el servidor:
+
+   ```bash
+   npm run dev  
+
+5. Accede al proyecto en el navegador o herramientas como Postman:
+
+http://localhost:4300  
+
+Futuras funcionalidades
+Roles de usuario: Distinción entre administradores y empleados con permisos específicos.
+Gestión avanzada de tareas: Organización en categorías, prioridad y notificaciones.
+Soporte logístico: Planificación de transporte y gestión colaborativa de recursos.
+Mejoras visuales: Utilización de librerías CSS modernas en el frontend.
+Integración con APIs externas: Opciones para sincronizar datos con herramientas de terceros.
+Contribuciones
+Si deseas colaborar, abre un issue o envía un pull request. ¡Toda ayuda es bienvenida! 😊
+
+
+
+
+
+
+
+
+1. Clona el repositorio:
+
+  ```bash
+  git clone https://github.com/AlexanderMota/back_todo_list_nodejs.git
+
 Ejecuta el servidor:
 bash
 Copy
 Edit
-npm run dev  
+
+npm run dev
+ 
 Accede al proyecto en el navegador o herramientas como Postman:
-arduino
-Copy
-Edit
+
 http://localhost:3000  
 Endpoints disponibles
 POST /register: Registrar un nuevo usuario.
@@ -94,6 +123,7 @@ GET /tasks: Obtener todas las tareas asignadas al usuario autenticado.
 POST /tasks: Crear una nueva tarea.
 PUT /tasks/:id: Actualizar una tarea existente.
 DELETE /tasks/:id: Eliminar una tarea.
+
 Futuras funcionalidades
 Roles de usuario: Distinción entre administradores y empleados con permisos específicos.
 Gestión avanzada de tareas: Organización en categorías, prioridad y notificaciones.

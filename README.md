@@ -1,6 +1,8 @@
 # Back Todo List - Node.js  
 
-Este proyecto es una API desarrollada en Node.js que utiliza un enfoque basado en la **inyección de dependencias** con Awilix. Su principal objetivo es gestionar los datos necesarios para un frontend y manejar sesiones de usuario mediante **JSON Web Tokens (JWT)**.  
+Este proyecto es una API desarrollada en Node.js que utiliza un enfoque basado en la **inyección de dependencias** con Awilix. Esto facilita la contrucción de la aplicación siguiendo una arquitectura de **microservicios** y **Rest**.
+
+Su principal objetivo es gestionar los datos necesarios para un frontend y manejar sesiones de usuario mediante **JSON Web Tokens (JWT)**.  
 
 El proyecto es un remake de mi Trabajo de Fin de Grado (TFG) y forma parte de mi portfolio profesional.  
 
@@ -57,7 +59,7 @@ src/
 1. Clona el repositorio:
 
    ```bash
-   git clone https://github.com/AlexanderMota/back_todo_list_nodejs.git
+   git clone https://github.com/AlexanderMota/BackToDoListNodeJS.git
    
 2. Instala las dependencias:
 

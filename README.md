@@ -82,62 +82,21 @@ Crea un archivo .env en la raíz del proyecto con el siguiente contenido (ajusta
 
 5. Accede al proyecto en el navegador o herramientas como Postman:
 
-http://localhost:4300  
+ - http://localhost:4300  
 
-Futuras funcionalidades
-Roles de usuario: Distinción entre administradores y empleados con permisos específicos.
-Gestión avanzada de tareas: Organización en categorías, prioridad y notificaciones.
-Soporte logístico: Planificación de transporte y gestión colaborativa de recursos.
-Mejoras visuales: Utilización de librerías CSS modernas en el frontend.
-Integración con APIs externas: Opciones para sincronizar datos con herramientas de terceros.
-Contribuciones
+## Futuras funcionalidades
+
+**Roles de usuario:** Distinción entre administradores y empleados con permisos específicos.
+
+**Gestión avanzada de tareas:** Organización en categorías, prioridad y notificaciones.
+
+**Soporte logístico:** Planificación de transporte y gestión colaborativa de recursos.
+
+**Mejoras visuales:** Utilización de librerías CSS modernas en el frontend.
+
+**Integración con APIs externas:** Opciones para sincronizar datos con herramientas de terceros.
+
+## Contribuciones
+
 Si deseas colaborar, abre un issue o envía un pull request. ¡Toda ayuda es bienvenida! 😊
 
-
-
-
-
-
-
-
-1. Clona el repositorio:
-
-  ```bash
-  git clone https://github.com/AlexanderMota/back_todo_list_nodejs.git
-
-Ejecuta el servidor:
-bash
-Copy
-Edit
-
-npm run dev
- 
-Accede al proyecto en el navegador o herramientas como Postman:
-
-http://localhost:3000  
-Endpoints disponibles
-POST /register: Registrar un nuevo usuario.
-POST /login: Autenticación de usuario y generación de token JWT.
-POST /logout: Finalizar sesión del usuario.
-GET /tasks: Obtener todas las tareas asignadas al usuario autenticado.
-POST /tasks: Crear una nueva tarea.
-PUT /tasks/:id: Actualizar una tarea existente.
-DELETE /tasks/:id: Eliminar una tarea.
-
-Futuras funcionalidades
-Roles de usuario: Distinción entre administradores y empleados con permisos específicos.
-Gestión avanzada de tareas: Organización en categorías, prioridad y notificaciones.
-Soporte logístico: Planificación de transporte y gestión colaborativa de recursos.
-Mejoras visuales: Utilización de librerías CSS modernas en el frontend.
-Integración con APIs externas: Opciones para sincronizar datos con herramientas de terceros.
-Contribuciones
-Si deseas colaborar, abre un issue o envía un pull request. ¡Toda ayuda es bienvenida! 😊
-
-Licencia
-Este proyecto está bajo la licencia MIT.
-
-css
-Copy
-Edit
-
-¿Te gustaría ajustar algún detalle o agregar algo más específico? 😊

@@ -5,10 +5,12 @@ class AuthController {
   
     login = async (req, res) => {
       try {
-        const { email, password } = req.body;
-        if (!email || !password) return res.status(400).json({ error: 'Email y contraseña son requeridos' });
+        const { user } = req.body;
+
+        if (!user.email || !user.password) return res.status(400).json({ error: 'Email y contraseña son requeridos' });
   
-        const data = await this.authService.login(email, password);
+        const data = await this.authService.login(user.email, user.password);
+        
         res.json(data);
       } catch (error) {
         res.status(401).json({ error: error.message });

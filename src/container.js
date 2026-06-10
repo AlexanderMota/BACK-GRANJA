@@ -7,13 +7,16 @@ import { DBPool } from './config/index.js';
 
 // routers
 import {AuthRoutes} from './routes/index.js';
+import {PerfilRoutes} from './routes/index.js';
 import routes from './routes/routes.js';
 
 // controladores
 import {AuthController} from './controllers/index.js';
+import {PerfilController} from './controllers/index.js';
 
 // servicios
 import {AuthService} from './services/index.js';
+import {PerfilService} from './services/index.js';
 
 // repositorios
 import {UserRepository} from './repositories/index.js';
@@ -38,17 +41,20 @@ container.register({
 
 // Registrar Rutas
 container.register({
-  AuthRoutes: asFunction(AuthRoutes).singleton()
+  AuthRoutes: asFunction(AuthRoutes).singleton(),
+  PerfilRoutes: asFunction(PerfilRoutes).singleton()
 });
 
 // Registrar Controladores
 container.register({
-  AuthController: asClass(AuthController).singleton()
+  AuthController: asClass(AuthController).singleton(),
+  PerfilController: asClass(PerfilController).singleton()
 });
 
 // Registrar Servicios
 container.register({
-  AuthService: asClass(AuthService).singleton()
+  AuthService: asClass(AuthService).singleton(),
+  PerfilService: asClass(PerfilService).singleton()
 });
 
 // Registrar Repositorios

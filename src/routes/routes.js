@@ -6,7 +6,7 @@ import path from "path";
 const swaggerPath = path.resolve("src/config/swagger.json");
 const swaggerDocument = JSON.parse(fs.readFileSync(swaggerPath, "utf8"));
 
-export default ({ AuthRoutes }) => {
+export default ({ AuthRoutes, PerfilRoutes }) => {
   const router = Router();
 
   router.use((req, res, next) => {
@@ -25,6 +25,7 @@ export default ({ AuthRoutes }) => {
   });
 
   router.use('/auth', AuthRoutes);
+  router.use('/perfil', PerfilRoutes);
 
   router.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
   return router;

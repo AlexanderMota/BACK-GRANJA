@@ -1,7 +1,5 @@
 class AuthController {
   
-
-
   constructor({ AuthService }) {
     this.authService = AuthService;
   }
@@ -20,12 +18,13 @@ class AuthController {
         sameSite: 'lax',      // o 'strict' según tu caso
         maxAge: 3600 // 1h
       });
-      res.json({message: 'Login exitoso', user: data.user});
+      res.json({message: 'Login exitoso', user: data.user.email});
+
     } catch (error) {
       res.status(401).json({ error: error.message });
     }
   };
 }
-  
+
 export default AuthController;
   

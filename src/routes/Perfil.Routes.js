@@ -4,7 +4,7 @@ import { Router } from 'express';
 export default ({ PerfilController }) => {
   const router = Router();
 
-  router.get('/ver', authMiddleware, (req, res) => PerfilController.verperfil(req, res));
+  router.get('/ver', authMiddleware, (req, res) => PerfilController.verPerfil(req, res));
 
   return router;
 };

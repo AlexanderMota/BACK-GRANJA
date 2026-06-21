@@ -3,10 +3,11 @@ class PerfilController {
     this.perfilService = PerfilService;
   }
 
-  verperfil = async (req, res) => {
+  verPerfil = async (req, res) => {
+
     try {
       const user = req.user;
-      
+      console.log('Usuario en PerfilController:', user);
       if (!user) return res.status(400).json({ error: 'Usuario no autenticado' });
       
       res.json({message: 'Mostrando perfil', user: user.email});

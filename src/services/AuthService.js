@@ -26,12 +26,12 @@ class AuthService {
 
     // Generar JWT
     const token = jwt.sign(
-      { user_id: user.user_id, email: user.email, role: user.role_id },
+      { email: user.email, role: user.role_id },
       process.env.JWT_SECRET,
       { expiresIn: '2h' }
     );
 
-    return { token, user: { user_id: user.user_id, username: user.username, email: user.email, role: user.role_id } };
+    return token;
   }
 }
 

@@ -7,7 +7,7 @@ export default ({ AuthController }) => {
   router.get('/me', authMiddleware, (req, res) => AuthController.getMe(req, res));
 
   router.post('/login', (req, res) => AuthController.login(req, res));
-  router.post('/logout', (req, res) => AuthController.logout(req, res));
+  router.post('/logout', authMiddleware, (req, res) => AuthController.logout(req, res));
 
   return router;
 };

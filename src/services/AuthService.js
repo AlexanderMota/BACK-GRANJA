@@ -2,20 +2,20 @@ import jwt from 'jsonwebtoken';
 
 class AuthService {
   constructor({ UserRepository, UserValidations }) {
-    this.UserRepository = UserRepository;
-    this.UserVals = UserValidations;
+    this.userRepository = UserRepository;
+    this.userValidations = UserValidations;
   }
 
   async login(email, password) {
     let valid = false;
 
-    if (!this.UserVals.validateEmail(email)) throw new Error('Formato email incorrecto');
-    const user = await this.UserRepository.findByEmail(email);
+    if (!this.userValidations.validateEmail(email)) throw new Error('Formato email incorrecto');
+    const user = await this.userRepository.findByEmail(email);
 
     if (!user) throw new Error('Usuario no encontrado');
 
     // MUY IMPORTANTE: Reactivar esta linea ya que es la que compara la contraseña introducida por el usuario con la contraseña hasheada que debe haber almacenada en la base de datos. Desactivamos solo para pruebas.
-    //if (!this.UserVals.validateComparePassword(password, user.password)) throw new Error('Contraseña incorrecta');
+    //if (!this.userValidations.validateComparePassword(password, user.password)) throw new Error('Contraseña incorrecta');
     if (user.password.startsWith('$2b$')) {
       valid = await bcrypt.compare(password, user.password);
     } else {

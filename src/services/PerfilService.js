@@ -1,13 +1,24 @@
+import { randomUUID } from 'crypto';
+import bcrypt from 'bcrypt';
+
 class PerfilService {
   constructor({ UserRepository }) {
-    this.UserRepository = UserRepository;
+    this.userRepository = UserRepository;
   }
 
   //cambiar a getUserById o getUserProfile
-  async verperfil(user_id) {
-    const user = await this.UserRepository.findById(user_id);
+  async verPerfil(email) {
+    const user = await this.userRepository.findByEmail(email);
     if (!user) throw new Error('Usuario no encontrado');
-    return user;
+    const { password, ...userSafe } = user; // Exclude sensitive fields
+    return userSafe;
+  }
+  async crearPerfil(user) {
+    user.user_id = randomUUID();
+    user.password = await bcrypt.hash(user.password, 10); // Hash the password before saving
+//console.log('Datos recibidos para crear perfil en PerfilService:', user);
+    const newUser = await this.userRepository.register(user);
+    return newUser;
   }
 }
 

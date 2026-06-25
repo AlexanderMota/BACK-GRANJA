@@ -6,6 +6,7 @@ export default ({ AuthController }) => {
 
   router.get('/me', authMiddleware, (req, res) => AuthController.getMe(req, res));
 
+  router.post('/register', (req, res) => AuthController.crearPerfil(req, res));
   router.post('/login', (req, res) => AuthController.login(req, res));
   router.post('/logout', authMiddleware, (req, res) => AuthController.logout(req, res));
 

@@ -1,3 +1,4 @@
 import UserRepository from './UserRepository.js';
+import TareasRepository from './TareasRepository.js';
 
-export { UserRepository };
+export { UserRepository, TareasRepository };

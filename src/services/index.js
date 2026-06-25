@@ -1,4 +1,5 @@
 import AuthService from './AuthService.js';
-import PerfilService from './AuthService.js';
+import PerfilService from './PerfilService.js';
+import TareasService from './TareasService.js';
 
-export { AuthService, PerfilService };
+export { AuthService, PerfilService, TareasService };

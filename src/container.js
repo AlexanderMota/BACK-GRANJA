@@ -6,23 +6,20 @@ import app from './server.js';
 import { DBPool } from './config/index.js';
 
 // routers
-import {AuthRoutes} from './routes/index.js';
-import {PerfilRoutes} from './routes/index.js';
+import {AuthRoutes,PerfilRoutes,TareasRoutes} from './routes/index.js';
 import routes from './routes/routes.js';
 
 // controladores
-import {AuthController} from './controllers/index.js';
-import {PerfilController} from './controllers/index.js';
+import {AuthController,PerfilController,TareasController} from './controllers/index.js';
 
 // servicios
-import {AuthService} from './services/index.js';
-import {PerfilService} from './services/index.js';
+import {AuthService,PerfilService,TareasService} from './services/index.js';
 
 // repositorios
-import {UserRepository} from './repositories/index.js';
+import {UserRepository, TareasRepository} from './repositories/index.js';
 
 // modelos
-//import {User} from './models/index.js';
+//import {User, Tarea} from './models/index.js';
 
 // validaciones
 import { UserValidations } from './validations/index.js';
@@ -42,24 +39,28 @@ container.register({
 // Registrar Rutas
 container.register({
   AuthRoutes: asFunction(AuthRoutes).singleton(),
-  PerfilRoutes: asFunction(PerfilRoutes).singleton()
+  PerfilRoutes: asFunction(PerfilRoutes).singleton(),
+  TareasRoutes: asFunction(TareasRoutes).singleton()
 });
 
 // Registrar Controladores
 container.register({
   AuthController: asClass(AuthController).singleton(),
-  PerfilController: asClass(PerfilController).singleton()
+  PerfilController: asClass(PerfilController).singleton(),
+  TareasController: asClass(TareasController).singleton()
 });
 
 // Registrar Servicios
 container.register({
   AuthService: asClass(AuthService).singleton(),
-  PerfilService: asClass(PerfilService).singleton()
+  PerfilService: asClass(PerfilService).singleton(),
+  TareasService: asClass(TareasService).singleton()
 });
 
 // Registrar Repositorios
 container.register({
-  UserRepository: asClass(UserRepository).singleton()
+  UserRepository: asClass(UserRepository).singleton(),
+  TareasRepository: asClass(TareasRepository).singleton()
 });
 
 // Registrar Modelos

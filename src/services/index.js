@@ -1,8 +1,5 @@
-module.exports = {
-  EmpleadoService: require('./empleado.service'),
-  TareaService: require('./tarea.service'),
-  AuthService: require('./auth.service'),
-  UbicacionService: require('./ubicacion.service'),
-  SolicitudService: require('./solicitud.service'),
-  VehiculoService: require('./vehiculo.service')
-};
+import AuthService from './AuthService.js';
+import PerfilService from './PerfilService.js';
+import TareasService from './TareasService.js';
+
+export { AuthService, PerfilService, TareasService };

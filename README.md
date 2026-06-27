@@ -6,14 +6,12 @@ Su principal objetivo es gestionar los datos necesarios para un frontend y manej
 
 El proyecto es un remake de mi Trabajo de Fin de Grado (TFG) y forma parte de mi portfolio profesional.  
 
-
 ## Funcionalidades principales  
 
 - **Gestión de usuarios**: Registro, inicio de sesión y autenticación segura con JWT.  
 - **Gestión de tareas**: Creación, asignación y seguimiento de tareas entre usuarios.  
 - **Organización de transporte**: Futuras funciones para planificar transporte entre compañeros de trabajo.  
 - **Gestión logística**: Funciones SGE (Sistemas de Gestión Empresarial) para optimizar la colaboración en equipo.  
-
 
 ## Tecnologías utilizadas  
 
@@ -22,7 +20,6 @@ El proyecto es un remake de mi Trabajo de Fin de Grado (TFG) y forma parte de mi
 - **Awilix**: Implementación de inyección de dependencias para una arquitectura modular y escalable.  
 - **JWT**: Sistema de autenticación mediante tokens seguros.  
 - **MySQL**: Base de datos relacional para almacenar usuarios, tareas y otros datos clave.  
-
 
 ## Estructura del proyecto  
 
@@ -46,6 +43,7 @@ src/
 
 └── index.js # Archivo principal para iniciar el servidor
 
+
 ### Explicación de las carpetas  
 
 - **config/**: Aquí se manejan las configuraciones clave, como la conexión a la base de datos o las claves secretas para JWT.  
@@ -55,7 +53,6 @@ src/
 - **services/**: Implementa la lógica de negocio, asegurando que las reglas del dominio se cumplan.  
 - **utils/**: Incluye funciones reutilizables, como validaciones o formateos.  
 - **container.js**: Configura el contenedor de dependencias con Awilix para inyectar y resolver servicios.  
-
 
 ## Cómo iniciar el proyecto  
 
@@ -89,7 +86,6 @@ Crea un archivo .env en la raíz del proyecto con el siguiente contenido (ajusta
 
  - http://localhost:4300  
 
-
 ## Futuras funcionalidades
 
 **Roles de usuario:** Distinción entre administradores y empleados con permisos específicos.
@@ -101,7 +97,6 @@ Crea un archivo .env en la raíz del proyecto con el siguiente contenido (ajusta
 **Mejoras visuales:** Utilización de librerías CSS modernas en el frontend.
 
 **Integración con APIs externas:** Opciones para sincronizar datos con herramientas de terceros.
-
 
 ## Contribuciones
 

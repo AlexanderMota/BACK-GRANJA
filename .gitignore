@@ -2,7 +2,7 @@
 .env
 
 # Ignorar carpeta old/
-old/
+./old/
 
 # Otras configuraciones recomendadas para Node.js
 node_modules/

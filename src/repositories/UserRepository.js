@@ -27,7 +27,7 @@ class UserRepository {
     return result.insertId;
   }*/
   async findByEmail(email) {
-    const [rows] = await this.DBPool.query('SELECT name, lastname, username, email, password, phone, avatar_url, role_id FROM users WHERE email = ?', [email]);
+    const [rows] = await this.DBPool.query('SELECT user_id, name, lastname, username, email, password, phone, avatar_url, role_id FROM users WHERE email = ?', [email]);
     return rows.length ? rows[0] : null;
   }
   async findById(id) {

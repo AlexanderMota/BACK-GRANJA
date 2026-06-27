@@ -10,7 +10,7 @@ class PerfilService {
   async verPerfil(email) {
     const user = await this.userRepository.findByEmail(email);
     if (!user) throw new Error('Usuario no encontrado');
-    const { password, ...userSafe } = user; // Exclude sensitive fields
+    const { user_id, password, ...userSafe } = user; // Exclude sensitive fields
     return userSafe;
   }
   async crearPerfil(user) {

@@ -18,6 +18,25 @@ class PerfilController {
       res.status(401).json({ error: error.message });
     }
   };
+
+  actualizarPerfil = async (req, res) => {
+
+    try {
+      const user = req.user;
+      
+      if (!user) return res.status(400).json({ error: 'Usuario no autenticado' });
+
+      const { perfil } = req.body;
+
+      const perfilAct = await this.perfilService.actualizarPerfil(user.email, perfil);
+
+      res.json({message: 'Perfil actualizado.', user: perfilAct});
+
+    } catch (error){
+      console.log(error);
+      res.status(401).json({ error: error.message });
+    }
+  }
 }
 
 export default PerfilController;

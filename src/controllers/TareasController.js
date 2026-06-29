@@ -28,6 +28,7 @@ class TareasController {
       const { id } = req.params;
       const tarea = await this.tareasService.getTareaById(id);
       if (!tarea) return res.status(404).json({ error: 'Tarea no encontrada' });
+      console.log(tarea);
       res.json({ message: 'Tarea encontrada.', tarea });
     } catch (error) {
       //console.log('Error:', error.message);
@@ -38,7 +39,6 @@ class TareasController {
 
     try {
       const user = req.user;
-      console.log('Usuario en TareasController:', user);
       if (!user) return res.status(400).json({ error: 'Usuario no autenticado' });
       const priorities = await this.tareasService.getPriorities();
       res.json({ message: 'Prioridades encontradas.', priorities });
@@ -51,7 +51,6 @@ class TareasController {
 
     try {
       const user = req.user;
-      console.log('Usuario en TareasController:', user);
       if (!user) return res.status(400).json({ error: 'Usuario no autenticado' });
       const status = await this.tareasService.getStatus();
       res.json({ message: 'Status encontrados.', status });

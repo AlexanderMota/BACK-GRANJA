@@ -23,7 +23,6 @@ yarn-error.log*
 
 # Database schemas
 esquema_dbsql/
-/esquema db sql/
 
 # Coverage
 coverage/

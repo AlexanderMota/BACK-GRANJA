@@ -20,6 +20,14 @@ class PerfilService {
     const newUser = await this.userRepository.register(user);
     return newUser;
   }
+  async actualizarPerfil(email, perfil){
+    console.log("datos del perfil para actualizar en PerfilService() => ", email, perfil);
+
+    const newUser = await this.userRepository.putProfile(email, perfil);
+
+
+    return newUser;
+  }
 }
 
 export default PerfilService;

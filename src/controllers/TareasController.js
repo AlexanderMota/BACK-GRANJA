@@ -28,7 +28,7 @@ class TareasController {
       const { id } = req.params;
       const tarea = await this.tareasService.getTareaById(id);
       if (!tarea) return res.status(404).json({ error: 'Tarea no encontrada' });
-      console.log(tarea);
+      //console.log(tarea);
       res.json({ message: 'Tarea encontrada.', tarea });
     } catch (error) {
       //console.log('Error:', error.message);

@@ -10,13 +10,13 @@ import {AuthRoutes,PerfilRoutes,TareasRoutes} from './routes/index.js';
 import routes from './routes/routes.js';
 
 // controladores
-import {AuthController,PerfilController,TareasController} from './controllers/index.js';
+import {AuthController,PerfilController,TareasController, CommentsController} from './controllers/index.js';
 
 // servicios
-import {AuthService,PerfilService,TareasService} from './services/index.js';
+import {AuthService,PerfilService,TareasService,CommentsService} from './services/index.js';
 
 // repositorios
-import {UserRepository, TareasRepository} from './repositories/index.js';
+import {UserRepository, TareasRepository,CommentsRepository} from './repositories/index.js';
 
 // modelos
 //import {User, Tarea} from './models/index.js';
@@ -47,20 +47,23 @@ container.register({
 container.register({
   AuthController: asClass(AuthController).singleton(),
   PerfilController: asClass(PerfilController).singleton(),
-  TareasController: asClass(TareasController).singleton()
+  TareasController: asClass(TareasController).singleton(),
+  CommentsController: asClass(CommentsController).singleton()
 });
 
 // Registrar Servicios
 container.register({
   AuthService: asClass(AuthService).singleton(),
   PerfilService: asClass(PerfilService).singleton(),
-  TareasService: asClass(TareasService).singleton()
+  TareasService: asClass(TareasService).singleton(),
+  CommentsService: asClass(CommentsService).singleton()
 });
 
 // Registrar Repositorios
 container.register({
   UserRepository: asClass(UserRepository).singleton(),
-  TareasRepository: asClass(TareasRepository).singleton()
+  TareasRepository: asClass(TareasRepository).singleton(),
+  CommentsRepository: asClass(CommentsRepository).singleton()
 });
 
 // Registrar Modelos

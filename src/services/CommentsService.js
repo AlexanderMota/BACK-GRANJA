@@ -6,23 +6,27 @@ class CommentsService {
 
   async createComment(comment) {
     
-    const user = await this.userRepository.findByEmail(comment.user_id);
+    const user = await this.userRepository.findById(comment.user_id);
     if (!user) {
       throw new Error('Usuario no encontrado');
     }
-
-    comment.user_id = user.user_id; // Asignar el ID del usuario autenticado como creador de la tarea
-    //console.log('Tarea procesada en TareasService:', tarea);
-
-
+    
     const newComment = await this.commentsRepository.create(comment);
-    return newComment;
+
+    const resComment = await this.commentsRepository.findById(newComment.comment_id);
+    return resComment[0];
   }
 
-  async getCommentsByIdTarea(idTarea){
+  async getCommentsByIdTarea(task_id){
 
-    const comments = await this.commentsRepository.findByIdTarea(idTarea);
+    const comments = await this.commentsRepository.findByIdTarea(task_id);
     return comments;
+  }
+
+  async deleteComment(comment_id, user_id) {
+    const delComment = await this.commentsRepository.deleteComment(comment_id, user_id);
+
+    return delComment;
   }
 }
 

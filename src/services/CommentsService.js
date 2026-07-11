@@ -22,6 +22,10 @@ class CommentsService {
     const comments = await this.commentsRepository.findByIdTarea(task_id);
     return comments;
   }
+  async updateComment(comment_id, content){
+    const updatedComment = await this.commentsRepository.updateComment(comment_id, content);
+    return updatedComment;
+  }
 
   async deleteComment(comment_id, user_id) {
     const delComment = await this.commentsRepository.deleteComment(comment_id, user_id);

@@ -14,7 +14,8 @@ export default ({ TareasController, CommentsController }) => {
   router.post('/comentarios/:id', authMiddleware, (req, res) => CommentsController.createComment(req, res));
   
   router.put('/tarea/:id', authMiddleware, (req, res) => TareasController.updateTarea(req, res));
-  
+  router.put('/comentarios/:id', authMiddleware, (req, res) => CommentsController.updateComment(req, res));
+
   router.delete('/tarea/:id', authMiddleware, (req, res) => TareasController.deleteTarea(req, res));
   router.delete('/comentarios/:id', authMiddleware, (req, res) => CommentsController.deleteComment(req, res));
 

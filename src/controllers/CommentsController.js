@@ -11,12 +11,12 @@ class CommentsController {
 
       const {comment} = req.body;
 
-      if(!comment.parent_comment_id) comment.parent_comment_id = null;
       const {id} = req.params;
 
       comment.user_id = user.user_id;
       comment.task_id = id;
-//console.log('Comentario nuevo (createComment): ', comment);
+      console.log('Comentario nuevo (createComment): ', comment);
+
       const newComment = await this.commentsService.createComment(comment);
 
       res.json({message: 'Comentario creado', comment: newComment});
@@ -37,6 +37,21 @@ class CommentsController {
       res.json({message: 'Comentarios encontrados', comments: comments});
     } catch (error) {
       res.status(401).json({ error: error.message });
+    }
+  }
+  updateComment = async (req, res) => {
+    try {
+      const user = req.user;
+      if (!user) return res.status(400).json({ error: 'Usuario no autenticado' });
+
+      const {id} = req.params;
+      const {content} = req.body;
+
+      const updatedComment = await this.commentsService.updateComment(id, content);
+
+      res.json({message: 'Comentario actualizado', comment: updatedComment});
+    } catch (error) {
+      res.status(401).json({ error: error.message});
     }
   }
 

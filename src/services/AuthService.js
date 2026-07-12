@@ -6,6 +6,12 @@ class AuthService {
     this.userValidations = UserValidations;
   }
 
+  async getMe(id) {
+    const user = await this.userRepository.findById(id);
+    if (!user) throw new Error('Usuario no encontrado');
+    return user;
+  }
+
   async login(email, password) {
     let valid = false;
 
@@ -26,7 +32,7 @@ class AuthService {
 
     // Generar JWT
     const token = jwt.sign(
-      { user_id: user.user_id, username: user.username, email: user.email, role: user.role },
+      { user_id: user.user_id, role: user.role },
       process.env.JWT_SECRET,
       { expiresIn: '2h' }
     );

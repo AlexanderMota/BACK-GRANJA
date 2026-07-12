@@ -7,6 +7,14 @@ class TareasRepository {
     const [rows] = await this.DBPool.query('SELECT task_id, name, description, status, priority, created_at, updated_at, parent_task_id FROM tasks');
     return rows;
   }
+  async findParentTasks() {
+    const [rows] = await this.DBPool.query('SELECT task_id, name, description, status, priority, created_at, updated_at, parent_task_id FROM tasks WHERE parent_task_id is null');
+    return rows;
+  }
+  async findSubTasks(parent_task_id) {
+    const [rows] = await this.DBPool.query('SELECT task_id, name, description, status, priority, created_at, updated_at, parent_task_id FROM tasks WHERE parent_task_id = ?', [parent_task_id]);
+    return rows;
+  }
   async findById(id) {
     const [rows] = await this.DBPool.query('SELECT task_id, name, description, status, priority, created_at, updated_at, parent_task_id FROM tasks WHERE task_id = ?', [id]);
     return rows.length ? rows[0] : null;
@@ -28,19 +36,17 @@ class TareasRepository {
       .replace(/'/g, '')
       .split(',');
     
-    //console.log('Priorities retrieved from database:', enumValues);
     return enumValues;
   }
   
   async findStatus() {
     const [rows] = await this.DBPool.query("SHOW COLUMNS FROM tasks LIKE 'status'");
-    //console.log('Status retrieved from database:', rows);
+    
     const enumValues = rows[0].Type
       .match(/enum\((.*)\)/)[1]
       .replace(/'/g, '')
       .split(',');
     
-    //console.log('Status retrieved from database:', enumValues);
     return enumValues;
   }
 

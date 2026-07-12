@@ -15,7 +15,7 @@ class CommentsController {
 
       comment.user_id = user.user_id;
       comment.task_id = id;
-      console.log('Comentario nuevo (createComment): ', comment);
+      //console.log('Comentario nuevo (createComment): ', comment);
 
       const newComment = await this.commentsService.createComment(comment);
 
@@ -45,9 +45,9 @@ class CommentsController {
       if (!user) return res.status(400).json({ error: 'Usuario no autenticado' });
 
       const {id} = req.params;
-      const {content} = req.body;
+      const {comment} = req.body;
 
-      const updatedComment = await this.commentsService.updateComment(id, content);
+      const updatedComment = await this.commentsService.updateComment(id, comment.content);
 
       res.json({message: 'Comentario actualizado', comment: updatedComment});
     } catch (error) {

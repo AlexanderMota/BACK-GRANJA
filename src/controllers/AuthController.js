@@ -10,10 +10,20 @@ class AuthController {
     try {
       const user = req.user;
       if (!user) return res.status(401).json({ error: 'Usuario no autenticado' });
+
+      const userData = await this.authService.getMe(user.user_id);
       
-      res.json({message: 'Usuario activo.', user: { email: user.email, role: user.role }});
+      res.json({message: 'Usuario activo.', user: { 
+        user_id : userData.user_id,
+        name: userData.name,
+        lastname: userData.lastname,
+        username: userData.username, 
+        email: userData.email,
+        phone: userData.phone,
+        avatar_url: userData.avatar_url,
+        role: user.role }});
     } catch (error) {
-      console.log('Error:', error.message);
+      //console.log('Error:', error.message);
       res.status(406).json({ error: error.message });
     }
   };
@@ -21,7 +31,7 @@ class AuthController {
   crearPerfil = async (req, res) => {
     try {
       const { user } = req.body;
-      console.log('Datos recibidos para crear perfil:', user);
+      //console.log('Datos recibidos para crear perfil:', user);
       const newUser = await this.perfilService.crearPerfil(user);
       res.status(201).json({ message: 'Perfil creado.', user: newUser });
     } catch (error) {
@@ -48,7 +58,7 @@ class AuthController {
 
     } catch (error) {
       
-      console.log('Datos de login recibidos.', error);
+      //console.log('Datos de login recibidos.', error);
       res.status(401).json({ error: error.message });
     }
   };

@@ -3,19 +3,65 @@ class TareasController {
     this.tareasService = TareasService;
   }
 
-  //Para pruebas. Es importante proteger mas este endpoint o clausurarlo en produccion. Solo para pruebas de desarrollo.
-  getAllTareas = async (req, res) => {
+  createTarea = async (req, res) => {
 
     try {
       const user = req.user;
-      //console.log('Usuario en TareasController:', user);
+      
+      if (!user) return res.status(400).json({ error: 'Usuario no autenticado' });
+      const {task} = req.body;
+      task.created_by = user.user_id;
+      const nuevaTarea = await this.tareasService.createTarea(task);
+
+      res.status(201).json({ message: 'Tarea creada exitosamente.', task: nuevaTarea });
+    } catch (error) {
+      res.status(400).json({ error: error.message });
+    }
+  }
+
+  //Para pruebas. Es importante proteger mas este endpoint o clausurarlo en produccion. Solo para pruebas de desarrollo.
+  /*getAllTareas = async (req, res) => {
+
+    try {
+      const user = req.user;
+      
       if (!user) return res.status(400).json({ error: 'Usuario no autenticado' });
 
-      const tareas = await this.tareasService.getAllTareas();
+      const tasks = await this.tareasService.getAllTareas();
       
-      res.json({ message: 'Tareas encontradas.', tareas });
+      res.json({ message: 'Tareas encontradas.', tasks });
     } catch (error) {
-      //console.log('Error:', error.message);
+      res.status(401).json({ error: error.message });
+    }
+  };*/
+  getParentTasks = async (req, res) => {
+
+    try {
+      const user = req.user;
+      
+      if (!user) return res.status(400).json({ error: 'Usuario no autenticado' });
+
+      const tasks = await this.tareasService.getParentTasks();
+      
+      res.json({ message: 'Tareas encontradas.', tasks });
+    } catch (error) {
+      res.status(401).json({ error: error.message });
+    }
+  };
+  
+  getSubTasks = async (req, res) => {
+
+    try {
+      const user = req.user;
+      
+      if (!user) return res.status(400).json({ error: 'Usuario no autenticado' });
+
+      const { id } = req.params;
+
+      const tasks = await this.tareasService.getSubTasks(id);
+      
+      res.json({ message: 'Subtareas encontradas.', tasks });
+    } catch (error) {
       res.status(401).json({ error: error.message });
     }
   };
@@ -23,15 +69,16 @@ class TareasController {
 
     try {
       const user = req.user;
-      //console.log('Usuario en TareasController:', user);
+      
       if (!user) return res.status(400).json({ error: 'Usuario no autenticado' });
+
       const { id } = req.params;
-      const tarea = await this.tareasService.getTareaById(id);
-      if (!tarea) return res.status(404).json({ error: 'Tarea no encontrada' });
-      //console.log(tarea);
-      res.json({ message: 'Tarea encontrada.', tarea });
+      const task = await this.tareasService.getTareaById(id);
+
+      if (!task) return res.status(404).json({ error: 'Tarea no encontrada' });
+
+      res.json({ message: 'Tarea encontrada.', task });
     } catch (error) {
-      //console.log('Error:', error.message);
       res.status(400).json({ error: error.message });
     }
   };
@@ -43,7 +90,6 @@ class TareasController {
       const priorities = await this.tareasService.getPriorities();
       res.json({ message: 'Prioridades encontradas.', priorities });
     } catch (error) {
-      //console.log('Error:', error.message);
       res.status(400).json({ error: error.message });
     }
   };
@@ -55,40 +101,25 @@ class TareasController {
       const status = await this.tareasService.getStatus();
       res.json({ message: 'Status encontrados.', status });
     } catch (error) {
-      //console.log('Error:', error.message);
       res.status(400).json({ error: error.message });
     }
   };
 
-  createTarea = async (req, res) => {
-
-    try {
-      const user = req.user;
-      //console.log('Usuario en TareasController:', user);
-      if (!user) return res.status(400).json({ error: 'Usuario no autenticado' });
-      const {tarea} = req.body;
-      tarea.created_by = user.email;
-      const nuevaTarea = await this.tareasService.createTarea(tarea);
-
-      res.status(201).json({ message: 'Tarea creada exitosamente.', tarea: nuevaTarea });
-    } catch (error) {
-      //console.log('Error:', error.message);
-      res.status(400).json({ error: error.message });
-    }
-  }
   updateTarea = async (req, res) => {
 
     try {
       const user = req.user;
-      //console.log('Usuario en TareasController:', user);
+
       if (!user) return res.status(400).json({ error: 'Usuario no autenticado' });
+
       const { id } = req.params;
-      const {tarea} = req.body;
-      const tareaActualizada = await this.tareasService.updateTarea(id, tarea);
+      const {task} = req.body;
+      const tareaActualizada = await this.tareasService.updateTarea(id, task);
+
       if (!tareaActualizada) return res.status(404).json({ error: 'Tarea no encontrada' });
-      res.json({ message: 'Tarea actualizada exitosamente.', tarea: tareaActualizada });
+      
+      res.json({ message: 'Tarea actualizada exitosamente.', task: tareaActualizada });
     } catch (error) {
-      //console.log('Error:', error.message);
       res.status(400).json({ error: error.message });
     }
   };
@@ -100,9 +131,8 @@ class TareasController {
       const { id } = req.params;
       const tareaEliminada = await this.tareasService.deleteTarea(id);
       if (!tareaEliminada) return res.status(404).json({ error: 'Tarea no encontrada' });
-      res.json({ message: 'Tarea eliminada exitosamente.', tarea: tareaEliminada });
+      res.json({ message: 'Tarea eliminada exitosamente.', task: tareaEliminada });
     } catch (error) {
-      //console.log('Error:', error.message);
       res.status(400).json({ error: error.message });
     }
   };

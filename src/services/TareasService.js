@@ -4,15 +4,28 @@ class TareasService {
     this.taskRepository = TareasRepository;
   }
 
-  //cambiar a getUserById o getUserProfile
-  async getAllTareas() {
-    const tareas = await this.taskRepository.findAll();
-    return tareas;
+  async createTarea(task) {
+    const newTask = await this.taskRepository.create(task);
+
+    return newTask;
   }
-  
+
+  /*
+  async getAllTareas() {
+    const task = await this.taskRepository.findAll();
+    return task;
+  }*/
+  async getParentTasks() {
+    const task = await this.taskRepository.findParentTasks();
+    return task;
+  }
+  async getSubTasks(parent_task_id) {
+    const task = await this.taskRepository.findSubTasks(parent_task_id);
+    return task;
+  }
   async getTareaById(id) {
-    const tarea = await this.taskRepository.findById(id);
-    return tarea;
+    const task = await this.taskRepository.findById(id);
+    return task;
   }
   
   async getPriorities() {
@@ -24,30 +37,15 @@ class TareasService {
     return status;
   }
 
-  async createTarea(tarea) {
-    //console.log('Tarea recibida en TareasService:', tarea);
-    const user = await this.userRepository.findByEmail(tarea.created_by);
-    if (!user) {
-      throw new Error('Usuario no encontrado');
-    }
-
-    tarea.created_by = user.user_id; // Asignar el ID del usuario autenticado como creador de la tarea
-    //console.log('Tarea procesada en TareasService:', tarea);
-
-    const newTarea = await this.taskRepository.create(tarea);
-    return newTarea;
-    //return "Tarea no creada. Funcionalidad deshabilitada temporalmente por pruebas.";
-  }
-
   async updateTarea(id, tarea) {
     const updatedTarea = await this.taskRepository.update(id, tarea);
 
     return updatedTarea;
-    //return "Tarea no actualizada. Funcionalidad deshabilitada temporalmente por pruebas.";
   }
 
   async deleteTarea(id) {
     const deletedTarea = await this.taskRepository.delete(id);
+
     return deletedTarea;
   }
 }

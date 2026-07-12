@@ -7,6 +7,7 @@ export default ({ TareasController, CommentsController }) => {
   //router.get('/all', authMiddleware, (req, res) => TareasController.getAllTareas(req, res));
   router.get('/principales', authMiddleware, (req, res) => TareasController.getParentTasks(req, res));
   router.get('/derivadas/:id', authMiddleware, (req, res) => TareasController.getSubTasks(req, res));
+  router.get('/colaborando', authMiddleware, (req, res) => TareasController.getTasksByColaborating(req, res));
   router.get('/tarea/:id', authMiddleware, (req, res) => TareasController.getTareaById(req, res));
   router.get('/prioridades', authMiddleware, (req, res) => TareasController.getPriorities(req, res));
   router.get('/estatus', authMiddleware, (req, res) => TareasController.getStatus(req, res));

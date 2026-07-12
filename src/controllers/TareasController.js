@@ -41,7 +41,7 @@ class TareasController {
       
       if (!user) return res.status(400).json({ error: 'Usuario no autenticado' });
 
-      const tasks = await this.tareasService.getParentTasks();
+      const tasks = await this.tareasService.getParentTasksByUserID(user.user_id);
       
       res.json({ message: 'Tareas encontradas.', tasks });
     } catch (error) {
@@ -65,6 +65,25 @@ class TareasController {
       res.status(401).json({ error: error.message });
     }
   };
+
+  getTasksByColaborating = async (req, res) => {
+    try {
+      const user = req.user;
+      
+      if (!user) return res.status(400).json({ error: 'Usuario no autenticado' });
+
+      
+      const tasks = await this.tareasService.getTasksByColaborating(user.user_id);
+
+      if (!tasks) return res.status(404).json({ error: 'Tareas no encontradas' });
+
+      res.json({ message: 'Tareas encontradas.', tasks });
+
+
+    }catch (error) {
+      res.status(400).json({ error: error.message });
+    }
+  }
   getTareaById = async (req, res) => {
 
     try {
@@ -114,9 +133,10 @@ class TareasController {
 
       const { id } = req.params;
       const {task} = req.body;
-      const tareaActualizada = await this.tareasService.updateTarea(id, task);
 
-      if (!tareaActualizada) return res.status(404).json({ error: 'Tarea no encontrada' });
+      const tareaActualizada = await this.tareasService.updateTarea(id, task, user.user_id);
+
+      if (!tareaActualizada) return res.status(404).json({ error: 'Tarea no encontrada o propietario incorrecto' });
       
       res.json({ message: 'Tarea actualizada exitosamente.', task: tareaActualizada });
     } catch (error) {
@@ -127,13 +147,20 @@ class TareasController {
 
     try {
       const user = req.user;
+
       if (!user) return res.status(400).json({ error: 'Usuario no autenticado' });
+
       const { id } = req.params;
-      const tareaEliminada = await this.tareasService.deleteTarea(id);
-      if (!tareaEliminada) return res.status(404).json({ error: 'Tarea no encontrada' });
+      const tareaEliminada = await this.tareasService.deleteTarea(id, user.user_id);
+
+      if (!tareaEliminada) return res.status(404).json({ error: 'Tarea no encontrada o propietario incorrecto' });
+
       res.json({ message: 'Tarea eliminada exitosamente.', task: tareaEliminada });
+
     } catch (error) {
+
       res.status(400).json({ error: error.message });
+
     }
   };
 }

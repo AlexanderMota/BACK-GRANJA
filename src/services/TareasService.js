@@ -15,13 +15,17 @@ class TareasService {
     const task = await this.taskRepository.findAll();
     return task;
   }*/
-  async getParentTasks() {
-    const task = await this.taskRepository.findParentTasks();
-    return task;
+  async getParentTasksByUserID(user_id) {
+    const tasks = await this.taskRepository.getParentTasksByUserID(user_id);
+    return tasks;
   }
   async getSubTasks(parent_task_id) {
-    const task = await this.taskRepository.findSubTasks(parent_task_id);
-    return task;
+    const tasks = await this.taskRepository.findSubTasks(parent_task_id);
+    return tasks;
+  }
+  async getTasksByColaborating(user_id){
+    const tasks = await this.taskRepository.findTasksByColaborating(user_id);
+    return tasks;
   }
   async getTareaById(id) {
     const task = await this.taskRepository.findById(id);
@@ -37,14 +41,14 @@ class TareasService {
     return status;
   }
 
-  async updateTarea(id, tarea) {
-    const updatedTarea = await this.taskRepository.update(id, tarea);
+  async updateTarea(id, tarea, user_id) {
+    const updatedTarea = await this.taskRepository.update(id, tarea, user_id);
 
     return updatedTarea;
   }
 
-  async deleteTarea(id) {
-    const deletedTarea = await this.taskRepository.delete(id);
+  async deleteTarea(id, user_id) {
+    const deletedTarea = await this.taskRepository.delete(id, user_id);
 
     return deletedTarea;
   }

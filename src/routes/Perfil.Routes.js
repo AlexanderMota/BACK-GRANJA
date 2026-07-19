@@ -1,12 +1,20 @@
-import { authMiddleware } from '../middlewares/authMiddleware.js';
+import { authMiddleware } from '../middlewares/AuthMiddleware.js';
+import { uploadAvatar } from '../middlewares/UploadAvatar.js';
 import { Router } from 'express';
 
 export default ({ PerfilController }) => {
   const router = Router();
 
   router.get('/ver', authMiddleware, (req, res) => PerfilController.verPerfil(req, res));
+  router.get('/buscar/:query', authMiddleware, (req, res) => PerfilController.searchUsers(req, res));
+  router.get('/colaboradores/confirmados/:id', authMiddleware, (req, res) => PerfilController.getCollabsConfirmed(req, res));
+  router.get('/colaboradores/pendientes/:id', authMiddleware, (req, res) => PerfilController.getCollabsPending(req, res));
 
-  router.put('/', authMiddleware, (req, res) => PerfilController.actualizarPerfil(req, res))
+  router.post('/avatar', authMiddleware, uploadAvatar.single("avatar"),(req, res) => PerfilController.subirFotoDePerfil(req, res));
+  router.post('/colaboradores/:id', authMiddleware,(req, res) => PerfilController.postCollabRequest(req, res));
+
+  router.put('/', authMiddleware, (req, res) => PerfilController.actualizarPerfil(req, res));
+  router.put('/colaboradores/:id', authMiddleware, (req, res) => PerfilController.putCollabRequest(req, res));
 
   return router;
 };

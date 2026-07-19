@@ -1,4 +1,4 @@
-import { authMiddleware } from '../middlewares/authMiddleware.js';
+import { authMiddleware } from '../middlewares/AuthMiddleware.js';
 import { Router } from 'express';
 
 export default ({ AuthController }) => {

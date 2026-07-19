@@ -14,7 +14,6 @@ export const authMiddleware = (req, res, next) => {
     
     next();
   } catch (err) {
-    console.error('Error al verificar el token:', err);
     return res.status(400).json({ error: 'Token inválido o expirado' });
   }
 };

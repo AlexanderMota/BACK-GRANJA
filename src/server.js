@@ -1,6 +1,7 @@
 import cookieParser from 'cookie-parser';
 //import cors from "cors"; //Borrar la dependencia si no la usamos mas adelante.
 import express from "express";
+import path from "path";
 
 let app = null;
 
@@ -19,7 +20,8 @@ export default class Server {
       app = express()
         .use(cookieParser())
         .use(express.json())
-        .use(routes);
+        .use(routes)
+        .use("/uploads", express.static(path.join(process.cwd(), "uploads")));
   }
 
   start() {

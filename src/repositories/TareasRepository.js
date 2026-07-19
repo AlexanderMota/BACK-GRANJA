@@ -30,7 +30,7 @@ class TareasRepository {
     return rows;
   }
   async findById(id) {
-    const [rows] = await this.DBPool.query('SELECT created_by, task_id, name, description, status, priority, created_at, updated_at, parent_task_id FROM tasks WHERE task_id = ?', [id]);
+    const [rows] = await this.DBPool.query('SELECT created_by, task_id, tasks.name, description, status, priority, tasks.created_at, tasks.updated_at, parent_task_id, username, avatar_url FROM tasks JOIN users ON tasks.created_by = users.user_id WHERE task_id = ?', [id]);
     return rows.length ? rows[0] : null;
   }
   async findByOwnerId(owner_id) {

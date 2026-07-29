@@ -65,12 +65,6 @@ class PerfilService {
 
     return newUser;
   }
-  async getCollabsConfirmed(task_id){
-    return await this.userRepository.getCollabsConfirmed(task_id);
-  }
-  async getCollabsPending(task_id){
-    return await this.userRepository.getCollabsPending(task_id);
-  }
   async actualizarPerfil(user_id, perfil){
     //console.log("datos del perfil para actualizar en PerfilService() => ", user_id, perfil);
 
@@ -82,8 +76,12 @@ class PerfilService {
 
     return await this.userRepository.postCollabRequest(user_id, sender_user_id, task_id);
   }
-  async putCollabRequest(user_id, task_id){
-    return await this.userRepository.putCollabRequest(user_id, task_id);
+  async putCollabRequest(request_id, user_id){
+    return await this.userRepository.putCollabRequest(request_id, user_id);
+
+  }
+  async deleteCollabRequest(request_id){
+    return await this.userRepository.deleteCollabRequest(request_id);
 
   }
 }

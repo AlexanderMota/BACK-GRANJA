@@ -6,17 +6,17 @@ import app from './server.js';
 import { DBPool } from './config/index.js';
 
 // routers
-import {AuthRoutes,PerfilRoutes,TareasRoutes} from './routes/index.js';
+import { AuthRoutes, PerfilRoutes, TareasRoutes, CollaboratorsRoutes } from './routes/index.js';
 import routes from './routes/routes.js';
 
 // controladores
-import {AuthController,PerfilController,TareasController, CommentsController} from './controllers/index.js';
+import { AuthController, PerfilController, TareasController, CommentsController, CollaboratorsController } from './controllers/index.js';
 
 // servicios
-import {AuthService,PerfilService,TareasService,CommentsService} from './services/index.js';
+import { AuthService, PerfilService, TareasService, CommentsService, CollaboratorsService } from './services/index.js';
 
 // repositorios
-import {UserRepository, TareasRepository,CommentsRepository} from './repositories/index.js';
+import { UserRepository, TareasRepository, CommentsRepository, CollaboratorsRepository } from './repositories/index.js';
 
 // modelos
 //import {User, Tarea} from './models/index.js';
@@ -40,7 +40,8 @@ container.register({
 container.register({
   AuthRoutes: asFunction(AuthRoutes).singleton(),
   PerfilRoutes: asFunction(PerfilRoutes).singleton(),
-  TareasRoutes: asFunction(TareasRoutes).singleton()
+  TareasRoutes: asFunction(TareasRoutes).singleton(),
+  CollaboratorsRoutes: asFunction(CollaboratorsRoutes).singleton()
 });
 
 // Registrar Controladores
@@ -48,7 +49,8 @@ container.register({
   AuthController: asClass(AuthController).singleton(),
   PerfilController: asClass(PerfilController).singleton(),
   TareasController: asClass(TareasController).singleton(),
-  CommentsController: asClass(CommentsController).singleton()
+  CommentsController: asClass(CommentsController).singleton(),
+  CollaboratorsController: asClass(CollaboratorsController).singleton()
 });
 
 // Registrar Servicios
@@ -56,14 +58,16 @@ container.register({
   AuthService: asClass(AuthService).singleton(),
   PerfilService: asClass(PerfilService).singleton(),
   TareasService: asClass(TareasService).singleton(),
-  CommentsService: asClass(CommentsService).singleton()
+  CommentsService: asClass(CommentsService).singleton(),
+  CollaboratorsService: asClass(CollaboratorsService).singleton()
 });
 
 // Registrar Repositorios
 container.register({
   UserRepository: asClass(UserRepository).singleton(),
   TareasRepository: asClass(TareasRepository).singleton(),
-  CommentsRepository: asClass(CommentsRepository).singleton()
+  CommentsRepository: asClass(CommentsRepository).singleton(),
+  CollaboratorsRepository: asClass(CollaboratorsRepository).singleton()
 });
 
 // Registrar Modelos

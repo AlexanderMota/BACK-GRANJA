@@ -17,7 +17,7 @@ class TareasRepository {
     const [rows] = await this.DBPool.query('SELECT task_id, name, description, status, priority, created_at, updated_at, parent_task_id FROM tasks');
     return rows;
   }
-  async getParentTasksByUserID(user_id) {
+  async findParentTasksByUserID(user_id) {
     const [rows] = await this.DBPool.query('SELECT task_id, name, description, status, priority, created_at, updated_at, parent_task_id FROM tasks WHERE parent_task_id is null and created_by = ?', [user_id]);
     return rows;
   }
@@ -25,12 +25,77 @@ class TareasRepository {
     const [rows] = await this.DBPool.query('SELECT task_id, name, description, status, priority, created_at, updated_at, parent_task_id FROM tasks WHERE parent_task_id = ?', [parent_task_id]);
     return rows;
   }
-  async findTasksByColaborating(user_id) {
-    const [rows] = await this.DBPool.query('SELECT tasks.task_id, name, description, status, priority, created_at, updated_at, parent_task_id FROM tasks join user_tasks ON tasks.task_id = user_tasks.task_id WHERE user_tasks.user_id = ? and parent_task_id is null', [user_id]);
+  async findTasksByCollaborating(user_id) {
+    const [rows] = await this.DBPool.query(`
+        SELECT 
+          tasks.task_id, 
+          name, 
+          description, 
+          status, 
+          priority, 
+          created_at, 
+          updated_at, 
+          parent_task_id 
+        FROM tasks 
+        JOIN user_tasks 
+          ON tasks.task_id = user_tasks.task_id 
+       WHERE user_tasks.user_id = ? and parent_task_id is null
+      `, [user_id]);
     return rows;
   }
-  async findById(id) {
-    const [rows] = await this.DBPool.query('SELECT created_by, task_id, tasks.name, description, status, priority, tasks.created_at, tasks.updated_at, parent_task_id, username, avatar_url FROM tasks JOIN users ON tasks.created_by = users.user_id WHERE task_id = ?', [id]);
+  async findTasksByCollabRequest(user_id) {
+    const [rows] = await this.DBPool.query(`
+        SELECT 
+          tasks.task_id, 
+          tasks.name, 
+          tasks.description, 
+          tasks.status, 
+          tasks.priority, 
+          tasks.created_at, 
+          tasks.updated_at, 
+          tasks.parent_task_id 
+        FROM tasks JOIN requests_task 
+        ON tasks.task_id = requests_task.task_id 
+        WHERE requests_task.user_id = ? AND requests_task.status = 'pending'
+      `, [user_id]
+    );
+    return rows;
+  }
+  async findById(task_id, user_id) {
+    const [rows] = await this.DBPool.query(`
+        SELECT
+          t.created_by,
+          t.task_id,
+          t.name,
+          t.description,
+          t.status,
+          t.priority,
+          t.created_at,
+          t.updated_at,
+          t.parent_task_id,
+          u.username,
+          u.avatar_url
+        FROM tasks t
+        JOIN users u
+          ON u.user_id = t.created_by
+        WHERE t.task_id = ? AND (
+          t.created_by = ?
+          OR EXISTS (
+            SELECT 1
+            FROM user_tasks ut
+            WHERE ut.task_id = t.task_id
+              AND ut.user_id = ?
+          ) 
+          OR EXISTS (
+            SELECT 1
+            FROM requests_task rt
+            WHERE rt.task_id = t.task_id
+              AND rt.user_id = ?
+              AND rt.status = 'pending'
+          )
+        )
+      `, [task_id, user_id, user_id, user_id]
+    );
     return rows.length ? rows[0] : null;
   }
   async findByOwnerId(owner_id) {
@@ -65,9 +130,18 @@ class TareasRepository {
 
   async update(id, tarea, user_id) {
     const { name, description, status, priority, parent_task_id} = tarea;
-    const [result] = await this.DBPool.query(
-      'UPDATE tasks SET name = ?, description = ?, status = ?, priority = ?, parent_task_id = ?, updated_at = NOW() WHERE task_id = ? and created_by = ?',
-      [name, description, status, priority, parent_task_id, id, user_id]
+    const [result] = await this.DBPool.query(`
+        UPDATE tasks 
+        SET 
+          name = ?, 
+          description = ?, 
+          status = ?, 
+          priority = ?, 
+          parent_task_id = ?, 
+          updated_at = NOW() 
+        WHERE task_id = ? AND created_by = ?
+      `,
+      [ name, description, status, priority, parent_task_id, id, user_id ]
     );
     return result.affectedRows > 0 ? { task_id: id, ...tarea } : null;
   }

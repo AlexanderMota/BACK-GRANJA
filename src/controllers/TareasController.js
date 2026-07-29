@@ -66,14 +66,14 @@ class TareasController {
     }
   };
 
-  getTasksByColaborating = async (req, res) => {
+  getTasksByCollaborating = async (req, res) => {
     try {
       const user = req.user;
       
       if (!user) return res.status(400).json({ error: 'Usuario no autenticado' });
 
       
-      const tasks = await this.tareasService.getTasksByColaborating(user.user_id);
+      const tasks = await this.tareasService.getTasksByCollaborating(user.user_id);
 
       if (!tasks) return res.status(404).json({ error: 'Tareas no encontradas' });
 
@@ -84,6 +84,25 @@ class TareasController {
       res.status(400).json({ error: error.message });
     }
   }
+  getTasksByCollabRequest = async (req, res) => {
+    try {
+      const user = req.user;
+      
+      if (!user) return res.status(400).json({ error: 'Usuario no autenticado' });
+
+      
+      const tasks = await this.tareasService.getTasksByCollabRequest(user.user_id);
+
+      if (!tasks) return res.status(404).json({ error: 'Tareas no encontradas' });
+
+      res.json({ message: 'Tareas encontradas.', tasks });
+
+
+    }catch (error) {
+      res.status(400).json({ error: error.message });
+    }
+  }
+
   getTareaById = async (req, res) => {
 
     try {
@@ -92,7 +111,7 @@ class TareasController {
       if (!user) return res.status(400).json({ error: 'Usuario no autenticado' });
 
       const { id } = req.params;
-      const task = await this.tareasService.getTareaById(id);
+      const task = await this.tareasService.getTareaById(id,user.user_id);
 
       if (!task) return res.status(404).json({ error: 'Tarea no encontrada' });
 

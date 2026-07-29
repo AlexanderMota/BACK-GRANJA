@@ -15,42 +15,35 @@ class TareasService {
     const task = await this.taskRepository.findAll();
     return task;
   }*/
+  async getTareaById(task_id, user_id) {
+    return await this.taskRepository.findById(task_id, user_id);
+  }
   async getParentTasksByUserID(user_id) {
-    const tasks = await this.taskRepository.getParentTasksByUserID(user_id);
-    return tasks;
+    return await this.taskRepository.findParentTasksByUserID(user_id);
   }
   async getSubTasks(parent_task_id) {
-    const tasks = await this.taskRepository.findSubTasks(parent_task_id);
-    return tasks;
+    return await this.taskRepository.findSubTasks(parent_task_id);
   }
-  async getTasksByColaborating(user_id){
-    const tasks = await this.taskRepository.findTasksByColaborating(user_id);
-    return tasks;
+  async getTasksByCollaborating(user_id){
+    return await this.taskRepository.findTasksByCollaborating(user_id);
   }
-  async getTareaById(id) {
-    const task = await this.taskRepository.findById(id);
-    return task;
+  async getTasksByCollabRequest(user_id){
+    return await this.taskRepository.findTasksByCollabRequest(user_id);
   }
   
   async getPriorities() {
-    const priorities = await this.taskRepository.findPriorities();
-    return priorities;
+    return await this.taskRepository.findPriorities();
   }
   async getStatus() {
-    const status = await this.taskRepository.findStatus();
-    return status;
+    return await this.taskRepository.findStatus();
   }
 
   async updateTarea(id, tarea, user_id) {
-    const updatedTarea = await this.taskRepository.update(id, tarea, user_id);
-
-    return updatedTarea;
+    return await this.taskRepository.update(id, tarea, user_id);
   }
 
   async deleteTarea(id, user_id) {
-    const deletedTarea = await this.taskRepository.delete(id, user_id);
-
-    return deletedTarea;
+    return await this.taskRepository.delete(id, user_id);
   }
 }
 

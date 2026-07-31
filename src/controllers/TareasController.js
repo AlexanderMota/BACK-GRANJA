@@ -19,21 +19,6 @@ class TareasController {
     }
   }
 
-  //Para pruebas. Es importante proteger mas este endpoint o clausurarlo en produccion. Solo para pruebas de desarrollo.
-  /*getAllTareas = async (req, res) => {
-
-    try {
-      const user = req.user;
-      
-      if (!user) return res.status(400).json({ error: 'Usuario no autenticado' });
-
-      const tasks = await this.tareasService.getAllTareas();
-      
-      res.json({ message: 'Tareas encontradas.', tasks });
-    } catch (error) {
-      res.status(401).json({ error: error.message });
-    }
-  };*/
   getParentTasks = async (req, res) => {
 
     try {
@@ -47,8 +32,7 @@ class TareasController {
     } catch (error) {
       res.status(401).json({ error: error.message });
     }
-  };
-  
+  }
   getSubTasks = async (req, res) => {
 
     try {
@@ -64,8 +48,7 @@ class TareasController {
     } catch (error) {
       res.status(401).json({ error: error.message });
     }
-  };
-
+  }
   getTasksByCollaborating = async (req, res) => {
     try {
       const user = req.user;
@@ -119,7 +102,7 @@ class TareasController {
     } catch (error) {
       res.status(400).json({ error: error.message });
     }
-  };
+  }
   getPriorities = async (req, res) => {
 
     try {
@@ -130,7 +113,7 @@ class TareasController {
     } catch (error) {
       res.status(400).json({ error: error.message });
     }
-  };
+  }
   getStatus = async (req, res) => {
 
     try {
@@ -141,7 +124,7 @@ class TareasController {
     } catch (error) {
       res.status(400).json({ error: error.message });
     }
-  };
+  }
 
   updateTarea = async (req, res) => {
 
@@ -161,7 +144,8 @@ class TareasController {
     } catch (error) {
       res.status(400).json({ error: error.message });
     }
-  };
+  }
+
   deleteTarea = async (req, res) => {
 
     try {
@@ -181,7 +165,7 @@ class TareasController {
       res.status(400).json({ error: error.message });
 
     }
-  };
+  }
 }
 
 export default TareasController;

@@ -1,9 +1,12 @@
 class CollaboratorsController {
+
   constructor({ PerfilService, CollaboratorsService }) {
     this.perfilService = PerfilService;
     this.collabsService = CollaboratorsService;
   }
+
   getCollabRequestByIdTask = async (req, res) => {
+
     try {
       const user = req.user;
       
@@ -12,8 +15,6 @@ class CollaboratorsController {
       const { id } = req.params;
 
       const collabState = await this.collabsService.getCollabRequestByTaskId( id, user.user_id );
-
-      //console.log("getCollabRequestByIdTask: ", collabState);
 
       res.json({message: `Invitacion encontrada`, invitation: {
         request_task : {
@@ -38,16 +39,14 @@ class CollaboratorsController {
       res.status(401).json( {error: error.message});
     }
   }
-  
   getCollabRequestsByUserId = async (req, res) => {
+
     try {
       const user = req.user;
       
       if (!user) return res.status(400).json({ error: 'Usuario no autenticado' });
 
       const collabState = await this.collabsService.getCollabRequestsByUserId( user.user_id );
-
-      console.log("getCollabRequestsByUserId: ", collabState);
 
       res.json({message: `Invitacion encontrada`, invitation: {
         request_task : {
@@ -72,8 +71,6 @@ class CollaboratorsController {
       res.status(401).json( {error: error.message});
     }
   }
-
-  
   getCollabsConfirmed = async (req, res) => {
 
     try {
@@ -84,10 +81,6 @@ class CollaboratorsController {
       const { id } = req.params;
 
       const usersCollabs = await this.collabsService.getCollabsConfirmed(id);
-
-      console.log(usersCollabs);
-
-      //res.json({message: 'Perfiles encontrados', collaborators: usersCollabs});
 
       res.json({
         message: `Colaboraciones confirmadas encontradas: ${usersCollabs.length}`,
@@ -109,7 +102,6 @@ class CollaboratorsController {
       res.status(401).json({ error: error.message });
     }
   }
-
   getCollabsPending = async (req, res) => {
     
     try {
@@ -120,8 +112,6 @@ class CollaboratorsController {
       const { id } = req.params;
 
       const usersCollabs = await this.collabsService.getCollabsPending(id);
-      
-      console.log(usersCollabs);
       
       res.json({
         message: `Colaboraciones pendientes encontradas: ${usersCollabs.length}`,
@@ -155,16 +145,8 @@ class CollaboratorsController {
       const { task_id } = req.query;
       let collabState;
 
-
-      if(id == user.user_id) {
-        //console.log(`usuario ${id} solicita colaborar en esta tarea ${task_id}`);
-        collabState = await this.collabsService.postCollabRequest(id, null, task_id);
-        // esto debe generar una notificacion para el creador de la tarea
-      } else {
-        //console.log(`creador de la tarea ${task_id} solicita colaboracion del usuario ${id}`);
-        collabState = await this.collabsService.postCollabRequest(id, user.user_id, task_id);
-        // eso debe generar una notificacion para el usuario solicitado
-      }
+      if(id == user.user_id) collabState = await this.collabsService.postCollabRequest(id, null, task_id);
+      else collabState = await this.collabsService.postCollabRequest(id, user.user_id, task_id);
 
       const perfil = await this.perfilService.verPerfil(id);
 
@@ -182,7 +164,6 @@ class CollaboratorsController {
           }
         }
       });
-
     } catch (error){
       res.status(401).json({ error: error.message });
     }

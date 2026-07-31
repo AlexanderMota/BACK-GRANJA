@@ -1,4 +1,3 @@
-
 class UserRepository {
   constructor({ DBPool }) {
     this.DBPool = DBPool;
@@ -135,6 +134,7 @@ class UserRepository {
 
     return result.affectedRows > 0 ? profile : null;
   }
+
 }
 
 export default UserRepository;

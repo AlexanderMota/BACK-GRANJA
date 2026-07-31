@@ -10,12 +10,10 @@ class CommentsController {
       if (!user) return res.status(400).json({ error: 'Usuario no autenticado' });
 
       const {comment} = req.body;
-
       const {id} = req.params;
 
       comment.user_id = user.user_id;
       comment.task_id = id;
-      //console.log('Comentario nuevo (createComment): ', comment);
 
       const newComment = await this.commentsService.createComment(comment);
 
@@ -23,7 +21,7 @@ class CommentsController {
     } catch (error) {
       res.status(401).json({ error: error.message });
     }
-  };
+  }
 
   getCommentsByIdTarea = async (req, res) => {
     try {
@@ -39,6 +37,7 @@ class CommentsController {
       res.status(401).json({ error: error.message });
     }
   }
+
   updateComment = async (req, res) => {
     try {
       const user = req.user;

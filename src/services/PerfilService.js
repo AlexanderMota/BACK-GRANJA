@@ -57,6 +57,7 @@ class PerfilService {
     
     return userSafe;
   }
+
   async crearPerfil(user) {
     user.user_id = randomUUID();
     user.password = await bcrypt.hash(user.password, 10);
@@ -65,6 +66,7 @@ class PerfilService {
 
     return newUser;
   }
+
   async actualizarPerfil(user_id, perfil){
     //console.log("datos del perfil para actualizar en PerfilService() => ", user_id, perfil);
 
@@ -72,17 +74,40 @@ class PerfilService {
 
     return newUser;
   }
-  async postCollabRequest(user_id, sender_user_id, task_id) {
 
-    return await this.userRepository.postCollabRequest(user_id, sender_user_id, task_id);
-  }
-  async putCollabRequest(request_id, user_id){
-    return await this.userRepository.putCollabRequest(request_id, user_id);
+  async deleteAvatar(user_id){
 
-  }
-  async deleteCollabRequest(request_id){
-    return await this.userRepository.deleteCollabRequest(request_id);
+    const user = await this.verPerfil(user_id);
 
+    if (!user.avatar_url) {
+        throw new Error("El usuario no tiene avatar.");
+    }
+
+     const filePath = path.join(
+        process.cwd(),
+        "uploads",
+        "avatars",
+        user.avatar_url
+    );
+
+    try {
+
+        await fs.unlink(filePath);
+
+    } catch (err) {
+
+        console.warn("No se pudo eliminar el fichero:", err.message);
+
+    }
+
+    const updatuserRep = await this.userRepository.updateAvatar(user.user_id, null);
+
+    if(updatuserRep.affectedRows > 0){
+
+      user.avatar_url = null;
+
+      return user;
+    }
   }
 }
 

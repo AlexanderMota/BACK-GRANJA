@@ -39,7 +39,7 @@ class TareasRepository {
         FROM tasks 
         JOIN user_tasks 
           ON tasks.task_id = user_tasks.task_id 
-       WHERE user_tasks.user_id = ? and parent_task_id is null
+       WHERE user_tasks.user_id = ?
       `, [user_id]);
     return rows;
   }

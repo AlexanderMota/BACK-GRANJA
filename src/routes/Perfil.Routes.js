@@ -11,5 +11,8 @@ export default ({ PerfilController }) => {
   router.post('/avatar', authMiddleware, uploadAvatar.single("avatar"),(req, res) => PerfilController.subirFotoDePerfil(req, res));
 
   router.put('/', authMiddleware, (req, res) => PerfilController.actualizarPerfil(req, res));
+
+  router.delete('/avatar', authMiddleware, (req, res) => PerfilController.deleteFotoDePerfil(req, res));
+
   return router;
 };

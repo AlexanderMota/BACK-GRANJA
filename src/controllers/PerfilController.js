@@ -28,10 +28,7 @@ class PerfilController {
 
       const avatar_url = req.file.filename;
 
-      // REVISAR seguramente no haga falta este const user, solo el await
-      const updatedUser = await this.perfilService.updateAvatar( user.user_id, avatar_url );
-
-
+      await this.perfilService.updateAvatar( user.user_id, avatar_url );
 
       res.json({
           message: "Avatar actualizado",
@@ -43,7 +40,7 @@ class PerfilController {
     } catch (error) {
       res.status(401).json({ error: error.message });
     }
-  };
+  }
 
   verPerfil = async (req, res) => {
 
@@ -59,7 +56,7 @@ class PerfilController {
     } catch (error) {
       res.status(401).json({ error: error.message });
     }
-  };
+  }
   
   actualizarPerfil = async (req, res) => {
 
@@ -78,8 +75,27 @@ class PerfilController {
       res.status(401).json({ error: error.message });
     }
   }
-  
+    
+  deleteFotoDePerfil = async (req, res) => {
+
+    try {
+      const user = req.user;
+      
+      if (!user) return res.status(400).json({ error: 'Usuario no autenticado' });
+
+
+      const perfilAct = await this.perfilService.deleteAvatar(user.user_id);
+
+
+      res.json({message: 'Perfil actualizado.', user: perfilAct});
+
+    } catch (error){
+      res.status(401).json({ error: error.message });
+    }
+  }
+ 
 }
+
 
 export default PerfilController;
   

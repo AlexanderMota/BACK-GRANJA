@@ -9,6 +9,25 @@ class PerfilService {
     this.userRepository = UserRepository;
   }
 
+  async crearPerfil(user) {
+
+    user.user_id = randomUUID();
+    user.password = await bcrypt.hash(user.password, 10);
+
+    return await this.userRepository.register(user);
+  }
+
+  //cambiar a getUserById o getUserProfile
+  async getUserById(user_id) {
+    const user = await this.userRepository.findById(user_id);
+
+    if (!user) throw new Error('Usuario no encontrado');
+
+    const { password, ...userSafe } = user; // Exclude sensitive fields
+    
+    return userSafe;
+  }
+
   async searchUsers( query, user_id, task_id ){
     return await this.userRepository.searchUsers( query, user_id, task_id );
   }
@@ -47,26 +66,6 @@ class PerfilService {
     return updatedUser;
 
   }
-  //cambiar a getUserById o getUserProfile
-  async verPerfil(user_id) {
-    const user = await this.userRepository.findById(user_id);
-
-    if (!user) throw new Error('Usuario no encontrado');
-
-    const { password, ...userSafe } = user; // Exclude sensitive fields
-    
-    return userSafe;
-  }
-
-  async crearPerfil(user) {
-    user.user_id = randomUUID();
-    user.password = await bcrypt.hash(user.password, 10);
-    
-    const newUser = await this.userRepository.register(user);
-
-    return newUser;
-  }
-
   async actualizarPerfil(user_id, perfil){
     //console.log("datos del perfil para actualizar en PerfilService() => ", user_id, perfil);
 

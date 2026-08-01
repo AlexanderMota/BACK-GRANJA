@@ -49,7 +49,7 @@ class PerfilController {
 
       if (!user) return res.status(400).json({ error: 'Usuario no autenticado' });
 
-      const perfil = await this.perfilService.verPerfil(user.user_id);
+      const perfil = await this.perfilService.getUserById(user.user_id);
 
       res.json({message: 'Perfil encontrado.', user: perfil});
 

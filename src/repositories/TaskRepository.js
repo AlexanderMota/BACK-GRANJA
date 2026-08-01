@@ -62,6 +62,18 @@ class TareasRepository {
     return rows;
   }
   async findById(task_id, user_id) {
+
+    const [tar] = await this.DBPool.query(`
+        SELECT *
+        FROM tasks
+        WHERE task_id = ?
+      `, [task_id]
+    );
+
+    if (!tar.length) {
+      throw new Error("Tarea no encontrada");
+    }
+
     const [rows] = await this.DBPool.query(`
         SELECT
           t.created_by,
@@ -96,6 +108,11 @@ class TareasRepository {
         )
       `, [task_id, user_id, user_id, user_id]
     );
+
+    if (!rows.length) {
+      throw new Error("No tienes permiso para acceder a esta tarea");
+    }
+    
     return rows.length ? rows[0] : null;
   }
   async findByOwnerId(owner_id) {

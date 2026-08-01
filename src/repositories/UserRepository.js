@@ -7,13 +7,21 @@ class UserRepository {
     const [result] = await this.DBPool.query(`
       INSERT INTO users (
         user_id, 
+        name, 
+        lastname, 
+        username, 
         email, 
+        phone, 
         password, 
         role_id ) 
-      VALUES (?, ?, ?, ?)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?)
       `, [
         user.user_id,
+        user.name,
+        user.lastname,
+        user.username,
         user.email,
+        user.phone,
         user.password,
         5
       ]

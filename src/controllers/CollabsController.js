@@ -148,7 +148,7 @@ class CollaboratorsController {
       if(id == user.user_id) collabState = await this.collabsService.postCollabRequest(id, null, task_id);
       else collabState = await this.collabsService.postCollabRequest(id, user.user_id, task_id);
 
-      const perfil = await this.perfilService.verPerfil(id);
+      const perfil = await this.perfilService.getUserById(id);
 
       res.json({
         message: 'Colaboracion solicitada', 

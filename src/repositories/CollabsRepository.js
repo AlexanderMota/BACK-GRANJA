@@ -37,7 +37,7 @@ class CollaboratorsRepository {
   }
   async findCollabRequestByTaskId(task_id,user_id){
 
-    const [request_status_sender] = await this.DBPool.query(`
+    /*const [request_status_sender] = await this.DBPool.query(`
       SELECT  status, sender_user_id
       FROM    requests_task
       WHERE	task_id = ? AND user_id = ?
@@ -51,8 +51,8 @@ class CollaboratorsRepository {
       query = "user_id"
     }
     
-    if(!query) throw new Error("No se pudo determinar el tipo de solicitud.")
-
+    if(!query) throw new Error("No se pudo determinar el tipo de solicitud.");
+*/
     const [request_status] = await this.DBPool.query(`
       SELECT  
           requests_task.sender_user_id,
@@ -68,7 +68,7 @@ class CollaboratorsRepository {
           tasks.priority,
           tasks.status as 'tstatus'
       FROM  requests_task JOIN users
-        ON  requests_task.${query} = users.user_id
+        ON  requests_task.user_id = users.user_id
       JOIN tasks
         ON  requests_task.task_id = tasks.task_id
       WHERE	requests_task.task_id = ? AND requests_task.user_id = ?
@@ -85,24 +85,16 @@ class CollaboratorsRepository {
       WHERE	task_id = ? AND user_id = ? AND \`status\` = 'pending';
       `, [task_id, user_id]);
 
-      //console.log("la solicitud existe?: ",rows);
-
-
-    if(rows.length > 0) {
-      throw new Error(
-          "Esta solicitud ya existe"
-        );
-    }
+    if(rows.length > 0) throw new Error("Esta solicitud ya existe");
 
     const [result] = await this.DBPool.query(
       'INSERT INTO requests_task (user_id, sender_user_id, task_id) VALUES (?, ?, ?)',
       [user_id, sender_user_id, task_id]
     );
-
-      //console.log("la colaboracion existe?: ",result);
     
     return {request_id:result.insertId, sender_user_id:sender_user_id};
   }
+
   async putCollabRequest(request_id, user_id){
 
     const [rows] = await this.DBPool.query(`
@@ -111,29 +103,16 @@ class CollaboratorsRepository {
       WHERE	request_id = ?
       `, [request_id]);
 
-
-    if(rows.length < 1) {
-      throw new Error(
-          "Esta colaboración no ha sido solicitada"
-        );
-    } 
+    if(rows.length < 1) throw new Error("Esta colaboración no ha sido solicitada");
     
-      
-      if(user_id == rows[0].sender_user_id){
-
-        throw new Error(
-          "El propietario de la tarea no puede añadir colaboradores de manera unilateral. Esperando la respuesta del usuario invitado."
-        );
-      }
-     else {
-
-      if(!rows[0].sender_user_id && user_id == rows[0].user_id){
-        throw new Error(
-          "Los usuarios no pueden colaborar en tareas sin que el propietario de la tarea lo acepte. Esperando la respuesta del usuario propietario."
-        );
-      }
+    if(user_id == rows[0].sender_user_id)
+      throw new Error("El propietario de la tarea no puede añadir colaboradores de manera unilateral. Esperando la respuesta del usuario invitado.");
+    else if(!rows[0].sender_user_id && user_id == rows[0].user_id){
+      throw new Error(
+        "Los usuarios no pueden colaborar en tareas sin que el propietario de la tarea lo acepte. Esperando la respuesta del usuario propietario."
+      );
     }
-
+    
     await this.DBPool.query(
       `
         UPDATE requests_task 
@@ -143,12 +122,10 @@ class CollaboratorsRepository {
       `, [ rows[0].request_id ]
     );
 
-
     return await this.DBPool.query(
       'INSERT INTO user_tasks (user_id, task_id) VALUES (?, ?)',
       [rows[0].user_id, rows[0].task_id]
     );
-
   }
   
   async deleteCollabRequest(request_id,user_id){
@@ -159,8 +136,6 @@ class CollaboratorsRepository {
         user_id = ? OR
         sender_user_id = ?
       )`, [request_id,user_id,user_id]);
-
-      //console.log("solicitud de colaboracion eliminada: ", rows.affectedRows);
 
     if(rows.affectedRows < 1) {
       throw new Error(

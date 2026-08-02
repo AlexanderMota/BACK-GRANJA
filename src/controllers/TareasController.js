@@ -85,7 +85,22 @@ class TareasController {
       res.status(400).json({ error: error.message });
     }
   }
+  getPublicTasks = async (req, res) => {
 
+    try {
+      const user = req.user;
+      
+      if (!user) return res.status(400).json({ error: 'Usuario no autenticado' });
+
+      const tasks = await this.tareasService.getPublicTasks(user.user_id);
+
+      if (!tasks) return res.status(404).json({ error: 'Tareas no encontradas' });
+
+      res.json({ message: 'Tareas encontradas.', tasks });
+    } catch (error) {
+      res.status(400).json({ error: error.message });
+    }
+  }
   getTareaById = async (req, res) => {
 
     try {

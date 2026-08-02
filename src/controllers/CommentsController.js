@@ -30,7 +30,7 @@ class CommentsController {
 
       const {id} = req.params;
 
-      const comments = await this.commentsService.getCommentsByIdTarea(id);
+      const comments = await this.commentsService.getCommentsByIdTarea(id, user.user_id);
 
       res.json({message: 'Comentarios encontrados', comments: comments});
     } catch (error) {

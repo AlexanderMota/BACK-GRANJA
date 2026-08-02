@@ -5,37 +5,74 @@ class TareasRepository {
   }
 
   async create(tarea) {
-    const { name, description, status, priority, parent_task_id, created_by } = tarea;
-    const [result] = await this.DBPool.query(
-      'INSERT INTO tasks (name, description, status, priority, parent_task_id, created_by) VALUES (?, ?, ?, ?, ?, ?)',
-      [name, description, status, priority, parent_task_id, created_by]
+    const { name, description, status, priority, parent_task_id, created_by, visibility } = tarea;
+    const [result] = await this.DBPool.query(`
+      INSERT INTO tasks (
+        name, 
+        description, 
+        status, 
+        priority, 
+        parent_task_id, 
+        created_by,
+        visibility
+      ) VALUES (?, ?, ?, ?, ?, ?, ?)`, [
+        name, 
+        description, 
+        status, 
+        priority, 
+        parent_task_id, 
+        created_by,
+        visibility
+      ]
     );
     return { task_id: result.insertId, ...tarea };
   }
-
+/*
   async findAll() {
-    const [rows] = await this.DBPool.query('SELECT task_id, name, description, status, priority, created_at, updated_at, parent_task_id FROM tasks');
+    const [rows] = await this.DBPool.query(`
+      SELECT * 
+      FROM tasks
+    `);
     return rows;
   }
+*/
   async findParentTasksByUserID(user_id) {
-    const [rows] = await this.DBPool.query('SELECT task_id, name, description, status, priority, created_at, updated_at, parent_task_id FROM tasks WHERE parent_task_id is null and created_by = ?', [user_id]);
+    const [rows] = await this.DBPool.query(`
+      SELECT * 
+      FROM tasks 
+      WHERE parent_task_id is null and created_by = ?`
+      , [user_id]
+    );
     return rows;
   }
   async findSubTasks(parent_task_id) {
-    const [rows] = await this.DBPool.query('SELECT task_id, name, description, status, priority, created_at, updated_at, parent_task_id FROM tasks WHERE parent_task_id = ?', [parent_task_id]);
+    const [rows] = await this.DBPool.query(`
+        SELECT *
+        FROM tasks 
+        WHERE parent_task_id = ?
+      `, [parent_task_id]
+    );
     return rows;
   }
+  
+  async findPublicTasks(user_id) {
+    const [rows] = await this.DBPool.query(`
+      SELECT *
+      FROM tasks
+      WHERE visibility = 'public' AND created_by <> ? AND NOT EXISTS (
+          SELECT 1
+          FROM requests_task rt 
+          WHERE rt.task_id = tasks.task_id
+            AND rt.user_id = ?
+      )
+    `, [user_id, user_id]
+    );
+    return rows;
+  }
+
   async findTasksByCollaborating(user_id) {
     const [rows] = await this.DBPool.query(`
-        SELECT 
-          tasks.task_id, 
-          name, 
-          description, 
-          status, 
-          priority, 
-          created_at, 
-          updated_at, 
-          parent_task_id 
+        SELECT tasks.*
         FROM tasks 
         JOIN user_tasks 
           ON tasks.task_id = user_tasks.task_id 
@@ -45,15 +82,7 @@ class TareasRepository {
   }
   async findTasksByCollabRequest(user_id) {
     const [rows] = await this.DBPool.query(`
-        SELECT 
-          tasks.task_id, 
-          tasks.name, 
-          tasks.description, 
-          tasks.status, 
-          tasks.priority, 
-          tasks.created_at, 
-          tasks.updated_at, 
-          tasks.parent_task_id 
+        SELECT tasks.*
         FROM tasks JOIN requests_task 
         ON tasks.task_id = requests_task.task_id 
         WHERE requests_task.user_id = ? AND requests_task.status = 'pending'
@@ -76,15 +105,7 @@ class TareasRepository {
 
     const [rows] = await this.DBPool.query(`
         SELECT
-          t.created_by,
-          t.task_id,
-          t.name,
-          t.description,
-          t.status,
-          t.priority,
-          t.created_at,
-          t.updated_at,
-          t.parent_task_id,
+          t.*,
           u.username,
           u.avatar_url
         FROM tasks t
@@ -105,8 +126,13 @@ class TareasRepository {
               AND rt.user_id = ?
               AND rt.status = 'pending'
           )
+          OR EXISTS (
+            SELECT 1
+            FROM tasks 
+            WHERE visibility = 'public' AND task_id = ?
+          )
         )
-      `, [task_id, user_id, user_id, user_id]
+      `, [task_id, user_id, user_id, user_id, task_id]
     );
 
     if (!rows.length) {
@@ -146,7 +172,7 @@ class TareasRepository {
   }
 
   async update(id, tarea, user_id) {
-    const { name, description, status, priority, parent_task_id} = tarea;
+    const { name, description, status, priority, parent_task_id, visibility } = tarea;
     const [result] = await this.DBPool.query(`
         UPDATE tasks 
         SET 
@@ -155,10 +181,11 @@ class TareasRepository {
           status = ?, 
           priority = ?, 
           parent_task_id = ?, 
+          visibility = ?,
           updated_at = NOW() 
         WHERE task_id = ? AND created_by = ?
       `,
-      [ name, description, status, priority, parent_task_id, id, user_id ]
+      [ name, description, status, priority, parent_task_id, visibility, id, user_id ]
     );
     return result.affectedRows > 0 ? { task_id: id, ...tarea } : null;
   }

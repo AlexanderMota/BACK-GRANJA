@@ -37,22 +37,6 @@ class CollaboratorsRepository {
   }
   async findCollabRequestByTaskId(task_id,user_id){
 
-    /*const [request_status_sender] = await this.DBPool.query(`
-      SELECT  status, sender_user_id
-      FROM    requests_task
-      WHERE	task_id = ? AND user_id = ?
-      `, [task_id,user_id]);
-
-      let query = '';
-
-    if(request_status_sender.length && request_status_sender[0].status == 'pending'){
-      query = "sender_user_id"
-    }else if(request_status_sender[0].sender_user_id != user_id && request_status_sender[0].status == "accepted"){
-      query = "user_id"
-    }
-    
-    if(!query) throw new Error("No se pudo determinar el tipo de solicitud.");
-*/
     const [request_status] = await this.DBPool.query(`
       SELECT  
           requests_task.sender_user_id,
@@ -72,8 +56,9 @@ class CollaboratorsRepository {
       JOIN tasks
         ON  requests_task.task_id = tasks.task_id
       WHERE	requests_task.task_id = ? AND requests_task.user_id = ?
-      `, [task_id,user_id]);
-    //console.log("request_status", request_status);
+      `, [ task_id, user_id ]
+    );
+
     return request_status.length ? request_status[0] : null;
   }
 
@@ -107,11 +92,8 @@ class CollaboratorsRepository {
     
     if(user_id == rows[0].sender_user_id)
       throw new Error("El propietario de la tarea no puede añadir colaboradores de manera unilateral. Esperando la respuesta del usuario invitado.");
-    else if(!rows[0].sender_user_id && user_id == rows[0].user_id){
-      throw new Error(
-        "Los usuarios no pueden colaborar en tareas sin que el propietario de la tarea lo acepte. Esperando la respuesta del usuario propietario."
-      );
-    }
+    else if(!rows[0].sender_user_id && user_id == rows[0].user_id)
+      throw new Error("Los usuarios no pueden colaborar en tareas sin que el propietario de la tarea lo acepte. Esperando la respuesta del usuario propietario.");
     
     await this.DBPool.query(
       `

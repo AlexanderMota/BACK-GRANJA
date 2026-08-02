@@ -17,7 +17,6 @@ class PerfilService {
     return await this.userRepository.register(user);
   }
 
-  //cambiar a getUserById o getUserProfile
   async getUserById(user_id) {
     const user = await this.userRepository.findById(user_id);
 
@@ -76,7 +75,7 @@ class PerfilService {
 
   async deleteAvatar(user_id){
 
-    const user = await this.verPerfil(user_id);
+    const user = await this.getUserById(user_id);
 
     if (!user.avatar_url) {
         throw new Error("El usuario no tiene avatar.");

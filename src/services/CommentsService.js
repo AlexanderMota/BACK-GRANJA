@@ -19,9 +19,9 @@ class CommentsService {
     return resComment[0];
   }
 
-  async getCommentsByIdTarea(task_id){
+  async getCommentsByIdTarea(task_id, user_id){
 
-    const comments = await this.commentsRepository.findByIdTarea(task_id);
+    const comments = await this.commentsRepository.findByIdTarea(task_id, user_id);
 
     return comments;
   }

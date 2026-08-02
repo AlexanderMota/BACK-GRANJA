@@ -9,6 +9,7 @@ export default ({ TareasController, CommentsController }) => {
   router.get('/derivadas/:id', authMiddleware, (req, res) => TareasController.getSubTasks(req, res));
   router.get('/colaborando', authMiddleware, (req, res) => TareasController.getTasksByCollaborating(req, res));
   router.get('/invitaciones', authMiddleware, (req, res) => TareasController.getTasksByCollabRequest(req, res));
+  router.get('/publicas', authMiddleware, (req, res) => TareasController.getPublicTasks(req, res));
   router.get('/tarea/:id', authMiddleware, (req, res) => TareasController.getTareaById(req, res));
   router.get('/prioridades', authMiddleware, (req, res) => TareasController.getPriorities(req, res));
   router.get('/estatus', authMiddleware, (req, res) => TareasController.getStatus(req, res));

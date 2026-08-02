@@ -16,6 +16,10 @@ class CollaboratorsController {
 
       const collabState = await this.collabsService.getCollabRequestByTaskId( id, user.user_id );
 
+      //console.log("collabState", collabState);
+
+      if(!collabState) return res.status(202).json({message: `No se encontró invitación para la tarea ${id} y el usuario ${user.user_id}`, invitation: {}});
+
       res.json({message: `Invitacion encontrada`, invitation: {
         request_task : {
           request_id: collabState.request_id,
@@ -154,7 +158,7 @@ class CollaboratorsController {
         message: 'Colaboracion solicitada', 
         collaborator: {
           request_task:{
-            sender_user_id: collabState.sender_user_id,
+            sender_user_id: collabState.sender_user_id?collabState.sender_user_id:null,
             request_id: collabState.request_id
           },
           user: {

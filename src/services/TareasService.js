@@ -30,7 +30,9 @@ class TareasService {
   async getTasksByCollabRequest(user_id){
     return await this.taskRepository.findTasksByCollabRequest(user_id);
   }
-  
+  async getPublicTasks(user_id){
+    return await this.taskRepository.findPublicTasks(user_id);
+  }
   async getPriorities() {
     return await this.taskRepository.findPriorities();
   }

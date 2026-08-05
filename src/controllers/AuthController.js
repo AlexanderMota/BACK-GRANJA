@@ -45,13 +45,18 @@ class AuthController {
       if (!user.email || !user.password) return res.status(400).json({ error: 'Email y contraseña son requeridos' });
 
       const token = await this.authService.login(user.email, user.password);
+
+      let maxAge = 0;
+      if (user.rememberMe) maxAge = 30 * 24 * 60 * 60 * 1000;
+      else maxAge = 60 * 60 * 1000;
       
       res.cookie('access_token', token, {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',    // true en producción (HTTPS)
         sameSite: 'lax',
-        maxAge: 3600000
+        maxAge: maxAge
       });
+
       res.json({message: 'Login exitoso.', user: {email:user.email}});
 
     } catch (error) {

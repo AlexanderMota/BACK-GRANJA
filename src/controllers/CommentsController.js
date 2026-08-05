@@ -46,7 +46,7 @@ class CommentsController {
       const {id} = req.params;
       const {comment} = req.body;
 
-      const updatedComment = await this.commentsService.updateComment(id, comment.content);
+      const updatedComment = await this.commentsService.updateComment(id, user.user_id, comment.content);
 
       res.json({message: 'Comentario actualizado', comment: updatedComment});
     } catch (error) {

@@ -22,6 +22,7 @@ class CollaboratorsController {
 
       res.json({message: `Invitacion encontrada`, invitation: {
         request_task : {
+          sender_user_id: collabState.sender_user_id,
           request_id: collabState.request_id,
           task_id: collabState.task_id,
           user_id: collabState.user_id,

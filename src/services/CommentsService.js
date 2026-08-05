@@ -6,17 +6,11 @@ class CommentsService {
 
   async createComment(comment) {
     
-    const user = await this.userRepository.findById(comment.user_id);
-
-    if (!user) {
-      throw new Error('Usuario no encontrado');
-    }
-    
     const newComment = await this.commentsRepository.create(comment);
 
-    const resComment = await this.commentsRepository.findById(newComment.comment_id);
+    const resComment = await this.commentsRepository.findById(newComment.comment_id, comment.user_id);
 
-    return resComment[0];
+    return resComment;
   }
 
   async getCommentsByIdTarea(task_id, user_id){
@@ -25,8 +19,8 @@ class CommentsService {
 
     return comments;
   }
-  async updateComment(comment_id, content){
-    const updatedComment = await this.commentsRepository.updateComment(comment_id, content);
+  async updateComment(comment_id, user_id, content){
+    const updatedComment = await this.commentsRepository.updateComment(comment_id, user_id, content);
     
     return updatedComment;
   }

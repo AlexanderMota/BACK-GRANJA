@@ -5,7 +5,7 @@ class CommentsRepository {
   }
 
   async canAccessTask(task_id, user_id) {
-
+    
     const [rows] = await this.DBPool.query(`
       SELECT 1
       FROM tasks t
@@ -26,7 +26,6 @@ class CommentsRepository {
     return rows.length > 0;
   }
 
-
   async create(comment) {
     try {
 
@@ -45,9 +44,9 @@ class CommentsRepository {
       if (error.code === 'ER_NO_REFERENCED_ROW_2') 
           throw new Error('No se puede añadir un comentario a una tarea que no existe');
 
-      return error;
     } 
   }
+
   async findById(comment_id, user_id) {
     
     const rows = await this.DBPool.query(`
@@ -58,11 +57,12 @@ class CommentsRepository {
       ORDER BY c.created_at ASC
     `, [comment_id]);
 
-    if (!(await this.canAccessTask(rows[0].task_id, user_id))) 
+    if (!(await this.canAccessTask(rows[0][0].task_id, user_id))) 
       throw new Error("No tienes permisos para ver este comentario.");
 
-    return rows.length ? rows[0] : null;
+    return rows[0][0] || null;
   }
+
   async findByIdTarea(task_id, user_id) {
 
     if (!(await this.canAccessTask(task_id, user_id))) 
@@ -80,23 +80,23 @@ class CommentsRepository {
   }
   async updateComment(comment_id, user_id, content){
 
-    if (await this.findById(comment_id, user_id)) 
+    if (!(await this.findById(comment_id, user_id)))
       throw new Error("No tienes permisos para editar este comentario.");
     
-    const [result] = await this.DBPool.query(
-      'UPDATE comments SET content = ? WHERE comment_id = ?',
-      [content, comment_id]
+    const [result] = await this.DBPool.query(`
+        UPDATE comments SET content = ? WHERE comment_id = ?
+      `, [content, comment_id]
     );
     return result.affectedRows > 0;
   }
   async deleteComment(comment_id, user_id) {
 
-    if (await this.findById(comment_id, user_id)) 
+    if (!(await this.findById(comment_id, user_id))) 
       throw new Error("No tienes permisos para eliminar este comentario.");
 
-    const [result] = await this.DBPool.query(
-      'DELETE FROM comments WHERE comment_id = ? AND user_id = ?',
-      [comment_id, user_id]
+    const [result] = await this.DBPool.query(`
+        DELETE FROM comments WHERE comment_id = ? AND user_id = ?
+      `, [comment_id, user_id]
     );
     return result.affectedRows > 0;
   }

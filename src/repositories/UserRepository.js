@@ -1,3 +1,5 @@
+import bcrypt from 'bcrypt';
+
 class UserRepository {
   constructor({ DBPool }) {
     this.DBPool = DBPool;
@@ -64,8 +66,19 @@ class UserRepository {
   }
   async findById(id) {
     const [rows] = await this.DBPool.query( `
-        SELECT * 
-        FROM users 
+        SELECT 
+          user_id, 
+          name, 
+          lastname, 
+          username, 
+          email, 
+          password,
+          phone, 
+          avatar_url, 
+          role 
+        FROM users
+        JOIN roles
+        ON users.role_id = roles.role_id 
         WHERE user_id = ?
       `, 
       [id]
@@ -116,7 +129,7 @@ class UserRepository {
     return rows;
   }
   
-  async putProfile(user_id, profile){
+  async updateProfile(user_id, profile){
 
     const { name, lastname, username, phone, avatar_url} = profile;
     const [result] = await this.DBPool.query(
@@ -142,7 +155,25 @@ class UserRepository {
 
     return result.affectedRows > 0 ? profile : null;
   }
+  async updatePassword( user_id, currentPassword, newPassword ){
 
+    const [result] = await this.DBPool.query(
+      `
+        UPDATE users 
+        SET 
+          password = ?,
+          updated_at = NOW() 
+        WHERE user_id = ? AND password = ?
+      `, [
+        newPassword,
+        user_id,
+        currentPassword
+      ]
+    );
+    return result.affectedRows > 0;
+
+
+  }
 }
 
 export default UserRepository;

@@ -6,6 +6,18 @@ class TareasRepository {
 
   async create(tarea) {
     const { name, description, status, priority, parent_task_id, created_by, visibility } = tarea;
+
+    if(parent_task_id){
+      const [parentTask] = await this.DBPool.query(`
+        SELECT * 
+        FROM tasks 
+        WHERE task_id = ? AND created_by = ?`, [parent_task_id, created_by]
+      );
+      if (!parentTask.length) {
+        throw new Error("No tienes permiso para crear una subtarea en esta tarea.");
+      }
+    }
+
     const [result] = await this.DBPool.query(`
       INSERT INTO tasks (
         name, 
@@ -27,15 +39,7 @@ class TareasRepository {
     );
     return { task_id: result.insertId, ...tarea };
   }
-/*
-  async findAll() {
-    const [rows] = await this.DBPool.query(`
-      SELECT * 
-      FROM tasks
-    `);
-    return rows;
-  }
-*/
+  
   async findParentTasksByUserID(user_id) {
     const [rows] = await this.DBPool.query(`
       SELECT * 

@@ -68,9 +68,23 @@ class PerfilService {
   async actualizarPerfil(user_id, perfil){
     //console.log("datos del perfil para actualizar en PerfilService() => ", user_id, perfil);
 
-    const newUser = await this.userRepository.putProfile(user_id, perfil);
+    const newUser = await this.userRepository.updateProfile(user_id, perfil);
 
     return newUser;
+  }
+  async actualizarPassword( user_id, currentPassword, newPassword ){
+    
+    let valid = false;
+
+    const user = await this.userRepository.findById(user_id);
+
+    if (user.password.startsWith('$2b$')) 
+      valid = await bcrypt.compare(currentPassword, user.password);
+    else valid = currentPassword === user.password;
+    
+    if (!valid) throw new Error('Contraseña incorrecta');
+
+    return await this.userRepository.updatePassword( user.user_id, user.password, await bcrypt.hash(newPassword, 10));
   }
 
   async deleteAvatar(user_id){

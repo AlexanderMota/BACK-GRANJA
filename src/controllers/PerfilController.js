@@ -75,6 +75,26 @@ class PerfilController {
       res.status(401).json({ error: error.message });
     }
   }
+  actualizarPassword = async (req, res) => {
+
+    try {
+      const user = req.user;
+      
+      if (!user) return res.status(400).json({ error: 'Usuario no autenticado' });
+
+      const { password } = req.body;
+
+      if(password.newPassword == password.currentPassword) throw new error("La nueva contraseña es igual que la anterior");
+
+      const perfilAct = await this.perfilService.actualizarPassword(user.user_id,  password.currentPassword, password.newPassword);
+
+console.log("actualizarPassword(),perfilAct:", perfilAct);
+      res.json({message: 'Perfil actualizado.', user: user});
+
+    } catch (error){
+      res.status(401).json({ error: error.message });
+    }
+  }
     
   deleteFotoDePerfil = async (req, res) => {
 

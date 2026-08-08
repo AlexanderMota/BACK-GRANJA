@@ -45,7 +45,6 @@ class AuthController {
       if (!user.email || !user.password) return res.status(400).json({ error: 'Email y contraseña son requeridos' });
 
       const token = await this.authService.login(user.email, user.password);
-
       let maxAge = 0;
       if (user.rememberMe) maxAge = 30 * 24 * 60 * 60 * 1000;
       else maxAge = 60 * 60 * 1000;

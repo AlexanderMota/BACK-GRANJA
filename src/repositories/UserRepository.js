@@ -1,5 +1,3 @@
-import bcrypt from 'bcrypt';
-
 class UserRepository {
   constructor({ DBPool }) {
     this.DBPool = DBPool;
@@ -29,18 +27,6 @@ class UserRepository {
       ]
     );
     return result.insertId;
-  }
-  async updateAvatar(user_id, avatar_url) {
-
-    return await this.DBPool.query(`
-      UPDATE users 
-      SET avatar_url = ? 
-      WHERE user_id = ?
-    `, 
-      [ avatar_url, user_id ]
-    );
-
-    //return this.findById(user_id);
   }
 
   async findByEmail(email) {
@@ -129,9 +115,21 @@ class UserRepository {
     return rows;
   }
   
+  async updateAvatar(user_id, avatar_url) {
+
+    return await this.DBPool.query(`
+      UPDATE users 
+      SET avatar_url = ? 
+      WHERE user_id = ?
+    `, 
+      [ avatar_url, user_id ]
+    );
+
+    //return this.findById(user_id);
+  }
   async updateProfile(user_id, profile){
 
-    const { name, lastname, username, phone, avatar_url} = profile;
+    const { name, lastname, username, phone} = profile;
     const [result] = await this.DBPool.query(
       `
         UPDATE users 
@@ -140,7 +138,6 @@ class UserRepository {
           lastname = ?, 
           username = ?, 
           phone = ?, 
-          avatar_url = ?, 
           updated_at = NOW() 
         WHERE user_id = ?
       `, [
@@ -148,7 +145,6 @@ class UserRepository {
         lastname, 
         username, 
         phone, 
-        avatar_url, 
         user_id
       ]
     );

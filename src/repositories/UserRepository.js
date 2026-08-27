@@ -170,6 +170,14 @@ class UserRepository {
 
 
   }
+
+  async delete(user_id) {
+    const [result] = await this.DBPool.query(
+      'DELETE FROM users WHERE user_id = ?', 
+      [user_id]
+    );
+    return result.affectedRows > 0;
+  }
 }
 
 export default UserRepository;

@@ -353,4 +353,48 @@ describe('UserRepository', () => {
             ]
         );
     });
+
+    
+    test('delete > Debe devolver \'true\' si el usuario se elimina', async () => {
+
+        const user_id = '123';
+
+        mockDBPool.query.mockResolvedValue([
+            {
+                affectedRows: 1
+            }
+        ]);
+
+        const result = await repository.delete(user_id);
+
+        expect(result).toEqual(true);
+
+        expect(mockDBPool.query).toHaveBeenCalledTimes(1);
+
+        expect(mockDBPool.query).toHaveBeenCalledWith(
+            expect.stringContaining('DELETE FROM users WHERE user_id = ?'),
+            [ user_id ]
+        );
+    });
+    test('delete > Debe devolver \'false\' si el usuario no se elimina', async () => {
+
+        const user_id = '123';
+
+        mockDBPool.query.mockResolvedValue([
+            {
+                affectedRows: 0
+            }
+        ]);
+
+        const result = await repository.delete(user_id);
+
+        expect(result).toEqual(false);
+
+        expect(mockDBPool.query).toHaveBeenCalledTimes(1);
+
+        expect(mockDBPool.query).toHaveBeenCalledWith(
+            expect.stringContaining('DELETE FROM users WHERE user_id = ?'),
+            [ user_id ]
+        );
+    });
 });

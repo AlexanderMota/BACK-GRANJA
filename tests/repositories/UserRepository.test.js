@@ -19,382 +19,408 @@ describe('UserRepository', () => {
 
     });
 
-    test('register > Debe registrar un usuario y devolver su insertId', async () => {
+    describe('register', () => {
 
-        const newUser = {
-            user_id: '123',
-            name: null,
-            lastname: null,
-            username: null,
-            email: 'alex@test.com',
-            phone: null,
-            password: 'password123'
-        };
+        test('Debe registrar un usuario y devolver su insertId', async () => {
 
-        mockDBPool.query.mockResolvedValue([
-            {
-                insertId: 42
-            }
-        ]);
+            const newUser = {
+                user_id: '123',
+                name: null,
+                lastname: null,
+                username: null,
+                email: 'alex@test.com',
+                phone: null,
+                password: 'password123'
+            };
 
-        const result = await repository.register(newUser);
+            mockDBPool.query.mockResolvedValue([
+                {
+                    insertId: 42
+                }
+            ]);
 
-        expect(result).toBe(42);
+            const result = await repository.register(newUser);
 
-        expect(mockDBPool.query).toHaveBeenCalledTimes(1);
+            expect(result).toBe(42);
 
-        expect(mockDBPool.query).toHaveBeenCalledWith(
-            expect.stringContaining('INSERT INTO users'),
-            [
-                '123',
-                null,
-                null,
-                null,
-                'alex@test.com',
-                null,
-                'password123',
-                5
-            ]
-        );
+            expect(mockDBPool.query).toHaveBeenCalledTimes(1);
 
-    });
-    test('register > Debe propagar el error si falla el registro', async () => {
+            expect(mockDBPool.query).toHaveBeenCalledWith(
+                expect.stringContaining('INSERT INTO users'),
+                [
+                    '123',
+                    null,
+                    null,
+                    null,
+                    'alex@test.com',
+                    null,
+                    'password123',
+                    5
+                ]
+            );
 
-        const newUser = {
-            phone: '123456789',
-            password: 'password123'
-        };
+        });
+        test('Debe propagar el error si falla el registro', async () => {
 
-        const error = new Error('Error de base de datos');
+            const newUser = {
+                phone: '123456789',
+                password: 'password123'
+            };
 
-        mockDBPool.query.mockRejectedValue(error);
+            const error = new Error('Error de base de datos');
 
-        await expect(
-            repository.register(newUser)
-        ).rejects.toThrow('Error de base de datos');
+            mockDBPool.query.mockRejectedValue(error);
 
-    });
+            await expect(
+                repository.register(newUser)
+            ).rejects.toThrow('Error de base de datos');
 
-
-    test('findByEmail > Debe devolver el usuario cuando existe', async () => {
-
-        const user = {
-            user_id: '123',
-            username: 'alex',
-            email: 'alex@test.com'
-        };
-
-        mockDBPool.query.mockResolvedValue([[user]]);
-
-        const result = await repository.findByEmail('alex@test.com');
-
-        expect(result).toEqual(user);
-
-        expect(mockDBPool.query).toHaveBeenCalledTimes(1);
-
-        expect(mockDBPool.query).toHaveBeenCalledWith(
-            expect.stringContaining('WHERE email = ?'),
-            ['alex@test.com']
-        );
-
-    });
-    test('findByEmail > Debe devolver null cuando el usuario no existe', async () => {
-
-        mockDBPool.query.mockResolvedValue([
-            []
-        ]);
-
-        const result = await repository.findByEmail('noexiste@test.com');
-
-        expect(result).toBeNull();
-
-    });
+        });
 
 
-    test('findById > Debe devolver el usuario cuando existe', async () => {
+    })
 
-        const user = {
-            user_id: '123',
-            username: 'alex',
-            email: 'alex@test.com'
-        };
+    
+    describe('findByEmail', () => {
 
-        mockDBPool.query.mockResolvedValue([[user]]);
+        test('Debe devolver el usuario cuando existe', async () => {
 
-        const result = await repository.findById('123');
-
-        expect(result).toEqual(user);
-
-        expect(mockDBPool.query).toHaveBeenCalledTimes(1);
-
-        expect(mockDBPool.query).toHaveBeenCalledWith(
-            expect.stringContaining('WHERE user_id = ?'),
-            ['123']
-        );
-
-    });
-    test('findById > Debe devolver null cuando el usuario no existe', async () => {
-
-        mockDBPool.query.mockResolvedValue([
-            []
-        ]);
-
-        const result = await repository.findById('noexiste@test.com');
-
-        expect(result).toBeNull();
-
-    });
-
-    test('searchUsers > Debe devolver los usuarios que coinciden con la búsqueda', async () => {
-
-        const users = [
-            {
-                user_id: '456',
-                username: 'alexander',
-                avatar_url: 'avatar.jpg'
-            },
-            {
-                user_id: '789',
+            const user = {
+                user_id: '123',
                 username: 'alex',
-                avatar_url: null
-            }
-        ];
+                email: 'alex@test.com'
+            };
 
-        mockDBPool.query.mockResolvedValue([users]);
+            mockDBPool.query.mockResolvedValue([[user]]);
 
-        const result = await repository.searchUsers(
-            'alex',
-            '123',
-            10
-        );
+            const result = await repository.findByEmail('alex@test.com');
 
-        expect(result).toEqual(users);
+            expect(result).toEqual(user);
 
-        expect(mockDBPool.query).toHaveBeenCalledTimes(1);
+            expect(mockDBPool.query).toHaveBeenCalledTimes(1);
 
-        expect(mockDBPool.query).toHaveBeenCalledWith(
-            expect.stringContaining('SELECT'),
-            [
-                '123',
-                10,
-                10,
-                '%alex%',
-                '%alex%',
-                '%alex%',
-                '%alex%'
-            ]
-        );
-    });
-    test('searchUsers > Debe devolver un array vacío cuando no encuentra usuarios', async () => {
+            expect(mockDBPool.query).toHaveBeenCalledWith(
+                expect.stringContaining('WHERE email = ?'),
+                ['alex@test.com']
+            );
 
-        mockDBPool.query.mockResolvedValue([[]]);
+        });
+        test('Debe devolver null cuando el usuario no existe', async () => {
 
-        const result = await repository.searchUsers(
-            'usuarioinexistente',
-            '123',
-            10
-        );
+            mockDBPool.query.mockResolvedValue([
+                []
+            ]);
 
-        expect(result).toEqual([]);
+            const result = await repository.findByEmail('noexiste@test.com');
 
-        expect(mockDBPool.query).toHaveBeenCalledTimes(1);
+            expect(result).toBeNull();
 
+        });
     });
 
 
-    test('updateAvatar > Debe devolver \'affectedRows = 1\' cuando actualiza el avatar del usuario', async () => {
+    describe('findById', () => {
 
-        mockDBPool.query.mockResolvedValue([
-            {
-                affectedRows: 1
-            }
-        ]);
+        test('Debe devolver el usuario cuando existe', async () => {
 
-        const result = await repository.updateAvatar('123', '234');
+            const user = {
+                user_id: '123',
+                username: 'alex',
+                email: 'alex@test.com'
+            };
 
-        expect(result[0].affectedRows).toBe(1);
+            mockDBPool.query.mockResolvedValue([[user]]);
 
-        expect(mockDBPool.query).toHaveBeenCalledTimes(1);
+            const result = await repository.findById('123');
 
-        expect(mockDBPool.query).toHaveBeenCalledWith(
-            expect.stringContaining('WHERE user_id = ?'),
-            ['234', '123']
-        );
+            expect(result).toEqual(user);
 
-    });
-    test('updateAvatar > Debe devolver \'affectedRows = 0\' cuando el usuario no existe', async () => {
+            expect(mockDBPool.query).toHaveBeenCalledTimes(1);
 
-        mockDBPool.query.mockResolvedValue([
-            {
-                affectedRows: 0
-            }
-        ]);
+            expect(mockDBPool.query).toHaveBeenCalledWith(
+                expect.stringContaining('WHERE user_id = ?'),
+                ['123']
+            );
 
-        const result = await repository.updateAvatar('234', '234');
+        });
+        test('Debe devolver null cuando el usuario no existe', async () => {
 
-        expect(result[0].affectedRows).toBe(0);
+            mockDBPool.query.mockResolvedValue([
+                []
+            ]);
 
-        expect(mockDBPool.query).toHaveBeenCalledTimes(1);
+            const result = await repository.findById('noexiste');
 
-        expect(mockDBPool.query).toHaveBeenCalledWith(
-            expect.stringContaining('WHERE user_id = ?'),
-            ['234', '234']
-        );
+            expect(result).toBeNull();
 
+        });
     });
 
+    describe('searchUsers', () => {
 
-    test('updateProfile > Debe devolver el usuario cuando lo actualiza', async () => {
+        test('Debe devolver los usuarios que coinciden con la búsqueda', async () => {
 
-        const profile = {
-            name: 'Alexander',
-            lastname: 'Mota',
-            username: 'alex',
-            phone: '600123456'
-        };
+            const users = [
+                {
+                    user_id: '456',
+                    username: 'alexander',
+                    avatar_url: 'avatar.jpg'
+                },
+                {
+                    user_id: '789',
+                    username: 'alex',
+                    avatar_url: null
+                }
+            ];
 
-        mockDBPool.query.mockResolvedValue([
-            {
-                affectedRows: 1
-            }
-        ]);
+            mockDBPool.query.mockResolvedValue([users]);
 
-        const result = await repository.updateProfile('123', profile);
-
-        expect(result).toEqual(profile);
-
-        expect(mockDBPool.query).toHaveBeenCalledTimes(1);
-
-        expect(mockDBPool.query).toHaveBeenCalledWith(
-            expect.stringContaining('UPDATE users'),
-            [
-                'Alexander',
-                'Mota',
+            const result = await repository.searchUsers(
                 'alex',
-                '600123456',
-                '123'
-            ]
-        );
+                '123',
+                10
+            );
+
+            expect(result).toEqual(users);
+
+            expect(mockDBPool.query).toHaveBeenCalledTimes(1);
+
+            expect(mockDBPool.query).toHaveBeenCalledWith(
+                expect.stringContaining('SELECT'),
+                [
+                    '123',
+                    10,
+                    10,
+                    '%alex%',
+                    '%alex%',
+                    '%alex%',
+                    '%alex%'
+                ]
+            );
+        });
+        test('Debe devolver un array vacío cuando no encuentra usuarios', async () => {
+
+            mockDBPool.query.mockResolvedValue([[]]);
+
+            const result = await repository.searchUsers(
+                'usuarioinexistente',
+                '123',
+                10
+            );
+
+            expect(result).toEqual([]);
+
+            expect(mockDBPool.query).toHaveBeenCalledTimes(1);
+
+        });
     });
-    test('updateProfile > Debe devolver null cuando no se actualiza ningún usuario', async () => {
 
-        const profile = {
-            name: 'Alexander',
-            lastname: 'Mota',
-            username: 'alex',
-            phone: '600123456'
-        };
 
-        mockDBPool.query.mockResolvedValue([
-            {
-                affectedRows: 0
-            }
-        ]);
+    describe('updateAvatar', () => {
 
-        const result = await repository.updateProfile('999', profile);
+        test('Debe devolver \'affectedRows = 1\' cuando actualiza el avatar del usuario', async () => {
 
-        expect(result).toBeNull();
+            mockDBPool.query.mockResolvedValue([
+                {
+                    affectedRows: 1
+                }
+            ]);
 
-        expect(mockDBPool.query).toHaveBeenCalledTimes(1);
+            const result = await repository.updateAvatar('123', '234');
+
+            expect(result[0].affectedRows).toBe(1);
+
+            expect(mockDBPool.query).toHaveBeenCalledTimes(1);
+
+            expect(mockDBPool.query).toHaveBeenCalledWith(
+                expect.stringContaining('WHERE user_id = ?'),
+                ['234', '123']
+            );
+
+        });
+        test('Debe devolver \'affectedRows = 0\' cuando el usuario no existe', async () => {
+
+            mockDBPool.query.mockResolvedValue([
+                {
+                    affectedRows: 0
+                }
+            ]);
+
+            const result = await repository.updateAvatar('234', '234');
+
+            expect(result[0].affectedRows).toBe(0);
+
+            expect(mockDBPool.query).toHaveBeenCalledTimes(1);
+
+            expect(mockDBPool.query).toHaveBeenCalledWith(
+                expect.stringContaining('WHERE user_id = ?'),
+                ['234', '234']
+            );
+
+        });
     });
 
 
-    test('updatePassword > Debe devolver \'true\' cuando actualiza la contraseña', async () => {
+    describe('updateProfile', () => {
 
-        const user_id = '123'; 
-        const currentPassword = 'password123';
-        const newPassword = 'password234';
+        test('Debe devolver el usuario cuando lo actualiza', async () => {
 
-        mockDBPool.query.mockResolvedValue([
-            {
-                affectedRows: 1
-            }
-        ]);
+            const profile = {
+                name: 'Alexander',
+                lastname: 'Mota',
+                username: 'alex',
+                phone: '600123456'
+            };
 
-        const result = await repository.updatePassword(user_id, currentPassword, newPassword);
+            mockDBPool.query.mockResolvedValue([
+                {
+                    affectedRows: 1
+                }
+            ]);
 
-        expect(result).toEqual(true);
+            const result = await repository.updateProfile('123', profile);
 
-        expect(mockDBPool.query).toHaveBeenCalledTimes(1);
+            expect(result).toEqual(profile);
 
-        expect(mockDBPool.query).toHaveBeenCalledWith(
-            expect.stringContaining('WHERE user_id = ? AND password = ?'),
-            [
-                newPassword,
-                user_id,
-                currentPassword
-            ]
-        );
+            expect(mockDBPool.query).toHaveBeenCalledTimes(1);
+
+            expect(mockDBPool.query).toHaveBeenCalledWith(
+                expect.stringContaining('UPDATE users'),
+                [
+                    'Alexander',
+                    'Mota',
+                    'alex',
+                    '600123456',
+                    '123'
+                ]
+            );
+        });
+        test('Debe devolver null cuando no se actualiza ningún usuario', async () => {
+
+            const profile = {
+                name: 'Alexander',
+                lastname: 'Mota',
+                username: 'alex',
+                phone: '600123456'
+            };
+
+            mockDBPool.query.mockResolvedValue([
+                {
+                    affectedRows: 0
+                }
+            ]);
+
+            const result = await repository.updateProfile('999', profile);
+
+            expect(result).toBeNull();
+
+            expect(mockDBPool.query).toHaveBeenCalledTimes(1);
+        });
     });
-    test('updatePassword > Debe devolver \'false\' cuando no actualiza la contraseña', async () => {
 
-        const user_id = '123'; 
-        const currentPassword = 'password123';
-        const newPassword = 'password234';
 
-        mockDBPool.query.mockResolvedValue([
-            {
-                affectedRows: 0
-            }
-        ]);
+    describe('updatePassword', () => {
 
-        const result = await repository.updatePassword(user_id, currentPassword, newPassword);
+        test('Debe devolver \'true\' cuando actualiza la contraseña', async () => {
 
-        expect(result).toEqual(false);
+            const user_id = '123'; 
+            const currentPassword = 'password123';
+            const newPassword = 'password234';
 
-        expect(mockDBPool.query).toHaveBeenCalledTimes(1);
+            mockDBPool.query.mockResolvedValue([
+                {
+                    affectedRows: 1
+                }
+            ]);
 
-        expect(mockDBPool.query).toHaveBeenCalledWith(
-            expect.stringContaining('WHERE user_id = ? AND password = ?'),
-            [
-                newPassword,
-                user_id,
-                currentPassword
-            ]
-        );
+            const result = await repository.updatePassword(user_id, currentPassword, newPassword);
+
+            expect(result).toEqual(true);
+
+            expect(mockDBPool.query).toHaveBeenCalledTimes(1);
+
+            expect(mockDBPool.query).toHaveBeenCalledWith(
+                expect.stringContaining('WHERE user_id = ? AND password = ?'),
+                [
+                    newPassword,
+                    user_id,
+                    currentPassword
+                ]
+            );
+        });
+        test('Debe devolver \'false\' cuando no actualiza la contraseña', async () => {
+
+            const user_id = '123'; 
+            const currentPassword = 'password123';
+            const newPassword = 'password234';
+
+            mockDBPool.query.mockResolvedValue([
+                {
+                    affectedRows: 0
+                }
+            ]);
+
+            const result = await repository.updatePassword(user_id, currentPassword, newPassword);
+
+            expect(result).toEqual(false);
+
+            expect(mockDBPool.query).toHaveBeenCalledTimes(1);
+
+            expect(mockDBPool.query).toHaveBeenCalledWith(
+                expect.stringContaining('WHERE user_id = ? AND password = ?'),
+                [
+                    newPassword,
+                    user_id,
+                    currentPassword
+                ]
+            );
+        });
     });
 
     
-    test('delete > Debe devolver \'true\' si el usuario se elimina', async () => {
+    describe('delete', () => {
 
-        const user_id = '123';
+        test('Debe devolver \'true\' si el usuario se elimina', async () => {
 
-        mockDBPool.query.mockResolvedValue([
-            {
-                affectedRows: 1
-            }
-        ]);
+            const user_id = '123';
 
-        const result = await repository.delete(user_id);
+            mockDBPool.query.mockResolvedValue([
+                {
+                    affectedRows: 1
+                }
+            ]);
 
-        expect(result).toEqual(true);
+            const result = await repository.delete(user_id);
 
-        expect(mockDBPool.query).toHaveBeenCalledTimes(1);
+            expect(result).toEqual(true);
 
-        expect(mockDBPool.query).toHaveBeenCalledWith(
-            expect.stringContaining('DELETE FROM users WHERE user_id = ?'),
-            [ user_id ]
-        );
-    });
-    test('delete > Debe devolver \'false\' si el usuario no se elimina', async () => {
+            expect(mockDBPool.query).toHaveBeenCalledTimes(1);
 
-        const user_id = '123';
+            expect(mockDBPool.query).toHaveBeenCalledWith(
+                expect.stringContaining('DELETE FROM users WHERE user_id = ?'),
+                [ user_id ]
+            );
+        });
+        test('Debe devolver \'false\' si el usuario no se elimina', async () => {
 
-        mockDBPool.query.mockResolvedValue([
-            {
-                affectedRows: 0
-            }
-        ]);
+            const user_id = '123';
 
-        const result = await repository.delete(user_id);
+            mockDBPool.query.mockResolvedValue([
+                {
+                    affectedRows: 0
+                }
+            ]);
 
-        expect(result).toEqual(false);
+            const result = await repository.delete(user_id);
 
-        expect(mockDBPool.query).toHaveBeenCalledTimes(1);
+            expect(result).toEqual(false);
 
-        expect(mockDBPool.query).toHaveBeenCalledWith(
-            expect.stringContaining('DELETE FROM users WHERE user_id = ?'),
-            [ user_id ]
-        );
+            expect(mockDBPool.query).toHaveBeenCalledTimes(1);
+
+            expect(mockDBPool.query).toHaveBeenCalledWith(
+                expect.stringContaining('DELETE FROM users WHERE user_id = ?'),
+                [ user_id ]
+            );
+        });
     });
 });

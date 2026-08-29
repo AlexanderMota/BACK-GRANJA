@@ -16,7 +16,9 @@ class AuthService {
   async login(email, password) {
     let valid = false;
 
-    if (!this.userValidations.validateEmail(email)) throw new Error('Formato email incorrecto');
+    valid = await this.userValidations.validateEmail(email);
+
+    if (!valid) throw new Error('Formato email incorrecto');
     const user = await this.userRepository.findByEmail(email);
 
     if (!user) throw new Error('Usuario no encontrado');

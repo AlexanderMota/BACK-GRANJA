@@ -112,9 +112,9 @@ class PerfilService {
 
     }
 
-    const updatuserRep = await this.userRepository.updateAvatar(user.user_id, null);
+    const updatedUserRep = await this.userRepository.updateAvatar(user.user_id, null);
 
-    if(updatuserRep.affectedRows > 0){
+    if(updatedUserRep.affectedRows > 0){
 
       user.avatar_url = null;
 

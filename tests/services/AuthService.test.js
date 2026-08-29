@@ -1,6 +1,13 @@
 import { jest } from '@jest/globals';
-import AuthService from '../../src/services/AuthService.js';
+const mockJwtSign = jest.fn();
 
+jest.unstable_mockModule('jsonwebtoken', () => ({
+    default: {
+        sign: mockJwtSign
+    }
+}));
+
+const { default: AuthService } = await import('../../src/services/AuthService.js');
 
 describe('AuthService', () => {
 
@@ -12,7 +19,8 @@ describe('AuthService', () => {
     beforeEach(() => {
 
         mockUserRepository = {
-            findById: jest.fn()
+            findById: jest.fn(),
+            findByEmail: jest.fn()
         };
 
         mockUserValidations = {
@@ -42,7 +50,7 @@ describe('AuthService', () => {
             mockUserRepository.findById.mockResolvedValue(user);
 
 
-            const result = await service.getMe('123');
+            const result = await service.getMe(user.user_id);
 
 
             expect(result).toEqual(user);
@@ -50,7 +58,7 @@ describe('AuthService', () => {
             expect(mockUserRepository.findById).toHaveBeenCalledTimes(1);
 
             expect(mockUserRepository.findById)
-                .toHaveBeenCalledWith('123');
+                .toHaveBeenCalledWith(user.user_id);
 
         });
 
@@ -74,5 +82,100 @@ describe('AuthService', () => {
 
     });
 
+
+    describe('login', () => {
+        test('Debe devolver el token del usuario cuando las credenciales son correctas', async () => {
+
+            const email = 'alex@test.com'
+            const password = 'contraseña123'
+
+            mockUserValidations.validateEmail.mockResolvedValue(true);
+
+            mockUserRepository.findByEmail.mockResolvedValue({
+                user_id:'123',
+                email:email, 
+                password:password,
+                role:'user'
+            });
+
+            mockJwtSign.mockReturnValue('token');
+
+            const result = await service.login(email,password);
+
+            console.log('token: ', result)
+
+            expect(result).toEqual('token');
+
+            expect(mockUserRepository.findByEmail).toHaveBeenCalledTimes(1);
+
+            expect(mockUserRepository.findByEmail)
+                .toHaveBeenCalledWith(email);
+
+        });
+        test('Debe lanzar un error si la contraseña es incorrecta', async () => {
+
+            const email = 'alex@test.com'
+            const password = 'contraseña123'
+
+            mockUserValidations.validateEmail.mockResolvedValue(true);
+
+            mockUserRepository.findByEmail.mockResolvedValue({
+                user_id:'123',
+                email:email, 
+                password:password,
+                role:'user'
+            });
+
+            await expect(
+                service.login(email,password+4)
+            ).rejects.toThrow('Contraseña incorrecta');
+
+
+            expect(mockUserRepository.findByEmail).toHaveBeenCalledTimes(1);
+
+            expect(mockUserRepository.findByEmail)
+                .toHaveBeenCalledWith(email);
+
+        });
+        test('Debe lanzar un error si el email es incorrecto', async () => {
+
+            const email = 'noexiste@test.com'
+            const password = 'contraseña123'
+
+            mockUserValidations.validateEmail.mockResolvedValue(true);
+
+            mockUserRepository.findByEmail.mockResolvedValue(null);
+
+            await expect(
+                service.login(email,password)
+            ).rejects.toThrow('Usuario no encontrado'); 
+
+
+            expect(mockUserRepository.findByEmail).toHaveBeenCalledTimes(1);
+
+            expect(mockUserRepository.findByEmail)
+                .toHaveBeenCalledWith(email);
+
+        });
+        test('Debe lanzar un error si el formato del email es incorrecto', async () => {
+
+            const email = 'formato_incorrecto'
+            const password = 'contraseña123'
+
+            mockUserValidations.validateEmail.mockResolvedValue(false);
+
+            await expect(
+                service.login(email,password)
+            ).rejects.toThrow('Formato email incorrecto'); 
+
+
+            expect(mockUserValidations.validateEmail).toHaveBeenCalledTimes(1);
+
+            expect(mockUserValidations.validateEmail)
+                .toHaveBeenCalledWith(email);
+
+        });
+
+    });
 });
 

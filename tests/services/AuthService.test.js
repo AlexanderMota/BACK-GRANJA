@@ -102,8 +102,6 @@ describe('AuthService', () => {
 
             const result = await service.login(email,password);
 
-            console.log('token: ', result)
-
             expect(result).toEqual('token');
 
             expect(mockUserRepository.findByEmail).toHaveBeenCalledTimes(1);

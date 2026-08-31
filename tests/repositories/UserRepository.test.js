@@ -34,17 +34,13 @@ describe('UserRepository', () => {
             };
 
             mockDBPool.query.mockResolvedValue([
-                {
-                    insertId: 42
-                }
+                { insertId: 42 }
             ]);
 
             const result = await repository.register(newUser);
 
             expect(result).toBe(42);
-
             expect(mockDBPool.query).toHaveBeenCalledTimes(1);
-
             expect(mockDBPool.query).toHaveBeenCalledWith(
                 expect.stringContaining('INSERT INTO users'),
                 [
@@ -58,7 +54,6 @@ describe('UserRepository', () => {
                     5
                 ]
             );
-
         });
         test('Debe propagar el error si falla el registro', async () => {
 
@@ -74,10 +69,7 @@ describe('UserRepository', () => {
             await expect(
                 repository.register(newUser)
             ).rejects.toThrow('Error de base de datos');
-
         });
-
-
     })
 
     
@@ -96,25 +88,19 @@ describe('UserRepository', () => {
             const result = await repository.findByEmail('alex@test.com');
 
             expect(result).toEqual(user);
-
             expect(mockDBPool.query).toHaveBeenCalledTimes(1);
-
             expect(mockDBPool.query).toHaveBeenCalledWith(
                 expect.stringContaining('WHERE email = ?'),
                 ['alex@test.com']
             );
-
         });
         test('Debe devolver null cuando el usuario no existe', async () => {
 
-            mockDBPool.query.mockResolvedValue([
-                []
-            ]);
+            mockDBPool.query.mockResolvedValue([[]]);
 
             const result = await repository.findByEmail('noexiste@test.com');
 
             expect(result).toBeNull();
-
         });
     });
 
@@ -134,9 +120,7 @@ describe('UserRepository', () => {
             const result = await repository.findById('123');
 
             expect(result).toEqual(user);
-
             expect(mockDBPool.query).toHaveBeenCalledTimes(1);
-
             expect(mockDBPool.query).toHaveBeenCalledWith(
                 expect.stringContaining('WHERE user_id = ?'),
                 ['123']
@@ -145,14 +129,16 @@ describe('UserRepository', () => {
         });
         test('Debe devolver null cuando el usuario no existe', async () => {
 
-            mockDBPool.query.mockResolvedValue([
-                []
-            ]);
+            mockDBPool.query.mockResolvedValue([[]]);
 
             const result = await repository.findById('noexiste');
 
             expect(result).toBeNull();
-
+            expect(mockDBPool.query).toHaveBeenCalledTimes(1);
+            expect(mockDBPool.query).toHaveBeenCalledWith(
+                expect.stringContaining('WHERE user_id = ?'),
+                ['noexiste']
+            );
         });
     });
 
@@ -176,15 +162,11 @@ describe('UserRepository', () => {
             mockDBPool.query.mockResolvedValue([users]);
 
             const result = await repository.searchUsers(
-                'alex',
-                '123',
-                10
+                'alex', '123', 10
             );
 
             expect(result).toEqual(users);
-
             expect(mockDBPool.query).toHaveBeenCalledTimes(1);
-
             expect(mockDBPool.query).toHaveBeenCalledWith(
                 expect.stringContaining('SELECT'),
                 [
@@ -209,9 +191,7 @@ describe('UserRepository', () => {
             );
 
             expect(result).toEqual([]);
-
             expect(mockDBPool.query).toHaveBeenCalledTimes(1);
-
         });
     });
 
@@ -221,42 +201,32 @@ describe('UserRepository', () => {
         test('Debe devolver \'affectedRows = 1\' cuando actualiza el avatar del usuario', async () => {
 
             mockDBPool.query.mockResolvedValue([
-                {
-                    affectedRows: 1
-                }
+                { affectedRows: 1 }
             ]);
 
             const result = await repository.updateAvatar('123', '234');
 
             expect(result[0].affectedRows).toBe(1);
-
             expect(mockDBPool.query).toHaveBeenCalledTimes(1);
-
             expect(mockDBPool.query).toHaveBeenCalledWith(
                 expect.stringContaining('WHERE user_id = ?'),
                 ['234', '123']
             );
-
         });
         test('Debe devolver \'affectedRows = 0\' cuando el usuario no existe', async () => {
 
             mockDBPool.query.mockResolvedValue([
-                {
-                    affectedRows: 0
-                }
+                { affectedRows: 0 }
             ]);
 
             const result = await repository.updateAvatar('234', '234');
 
             expect(result[0].affectedRows).toBe(0);
-
             expect(mockDBPool.query).toHaveBeenCalledTimes(1);
-
             expect(mockDBPool.query).toHaveBeenCalledWith(
                 expect.stringContaining('WHERE user_id = ?'),
                 ['234', '234']
             );
-
         });
     });
 
@@ -273,17 +243,13 @@ describe('UserRepository', () => {
             };
 
             mockDBPool.query.mockResolvedValue([
-                {
-                    affectedRows: 1
-                }
+                { affectedRows: 1 }
             ]);
 
             const result = await repository.updateProfile('123', profile);
 
             expect(result).toEqual(profile);
-
             expect(mockDBPool.query).toHaveBeenCalledTimes(1);
-
             expect(mockDBPool.query).toHaveBeenCalledWith(
                 expect.stringContaining('UPDATE users'),
                 [
@@ -305,15 +271,12 @@ describe('UserRepository', () => {
             };
 
             mockDBPool.query.mockResolvedValue([
-                {
-                    affectedRows: 0
-                }
+                { affectedRows: 0 }
             ]);
 
             const result = await repository.updateProfile('999', profile);
 
             expect(result).toBeNull();
-
             expect(mockDBPool.query).toHaveBeenCalledTimes(1);
         });
     });
@@ -328,24 +291,16 @@ describe('UserRepository', () => {
             const newPassword = 'password234';
 
             mockDBPool.query.mockResolvedValue([
-                {
-                    affectedRows: 1
-                }
+                { affectedRows: 1 }
             ]);
 
             const result = await repository.updatePassword(user_id, currentPassword, newPassword);
 
             expect(result).toEqual(true);
-
             expect(mockDBPool.query).toHaveBeenCalledTimes(1);
-
             expect(mockDBPool.query).toHaveBeenCalledWith(
                 expect.stringContaining('WHERE user_id = ? AND password = ?'),
-                [
-                    newPassword,
-                    user_id,
-                    currentPassword
-                ]
+                [ newPassword, user_id, currentPassword ]
             );
         });
         test('Debe devolver \'false\' cuando no actualiza la contraseña', async () => {
@@ -355,24 +310,16 @@ describe('UserRepository', () => {
             const newPassword = 'password234';
 
             mockDBPool.query.mockResolvedValue([
-                {
-                    affectedRows: 0
-                }
+                { affectedRows: 0 }
             ]);
 
             const result = await repository.updatePassword(user_id, currentPassword, newPassword);
 
             expect(result).toEqual(false);
-
             expect(mockDBPool.query).toHaveBeenCalledTimes(1);
-
             expect(mockDBPool.query).toHaveBeenCalledWith(
                 expect.stringContaining('WHERE user_id = ? AND password = ?'),
-                [
-                    newPassword,
-                    user_id,
-                    currentPassword
-                ]
+                [ newPassword, user_id, currentPassword ]
             );
         });
     });
@@ -385,17 +332,13 @@ describe('UserRepository', () => {
             const user_id = '123';
 
             mockDBPool.query.mockResolvedValue([
-                {
-                    affectedRows: 1
-                }
+                { affectedRows: 1 }
             ]);
 
             const result = await repository.delete(user_id);
 
             expect(result).toEqual(true);
-
             expect(mockDBPool.query).toHaveBeenCalledTimes(1);
-
             expect(mockDBPool.query).toHaveBeenCalledWith(
                 expect.stringContaining('DELETE FROM users WHERE user_id = ?'),
                 [ user_id ]
@@ -406,17 +349,13 @@ describe('UserRepository', () => {
             const user_id = '123';
 
             mockDBPool.query.mockResolvedValue([
-                {
-                    affectedRows: 0
-                }
+                { affectedRows: 0 }
             ]);
 
             const result = await repository.delete(user_id);
 
             expect(result).toEqual(false);
-
             expect(mockDBPool.query).toHaveBeenCalledTimes(1);
-
             expect(mockDBPool.query).toHaveBeenCalledWith(
                 expect.stringContaining('DELETE FROM users WHERE user_id = ?'),
                 [ user_id ]

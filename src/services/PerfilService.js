@@ -66,8 +66,6 @@ class PerfilService {
 
   }
   async actualizarPerfil(user_id, perfil){
-    //console.log("datos del perfil para actualizar en PerfilService() => ", user_id, perfil);
-
     const newUser = await this.userRepository.updateProfile(user_id, perfil);
 
     return newUser;
@@ -78,9 +76,12 @@ class PerfilService {
 
     const user = await this.userRepository.findById(user_id);
 
-    if (user.password.startsWith('$2b$')) 
-      valid = await bcrypt.compare(currentPassword, user.password);
-    else valid = currentPassword === user.password;
+    if(user) {
+      if (user.password.startsWith('$2b$')) 
+        valid = await bcrypt.compare(currentPassword, user.password);
+      else
+        valid = currentPassword === user.password;
+    }
     
     if (!valid) throw new Error('Contraseña incorrecta');
 
@@ -92,7 +93,7 @@ class PerfilService {
     const user = await this.getUserById(user_id);
 
     if (!user.avatar_url) {
-        throw new Error("El usuario no tiene avatar.");
+        throw new Error("El usuario no tiene avatar");
     }
 
      const filePath = path.join(
@@ -105,10 +106,10 @@ class PerfilService {
     try {
 
         await fs.unlink(filePath);
-
+      
     } catch (err) {
 
-        console.warn("No se pudo eliminar el fichero:", err.message);
+        console.warn("No se pudo eliminar el fichero: ", err.message);
 
     }
 
@@ -119,7 +120,10 @@ class PerfilService {
       user.avatar_url = null;
 
       return user;
-    }
+    }else throw new Error('Hubo un problema inesperado al intentar realizar el cambio de contraseña');
+  }
+  async deleteProfile(user_id){
+    return await this.userRepository.delete(user_id);
   }
 }
 

@@ -1,20 +1,10 @@
 class TareasService {
-  constructor({ UserRepository, TareasRepository }) {
-    this.userRepository = UserRepository;
+  constructor({ TareasRepository }) {
     this.taskRepository = TareasRepository;
   }
-
   async createTarea(task) {
-    const newTask = await this.taskRepository.create(task);
-
-    return newTask;
+    return await this.taskRepository.create(task);
   }
-
-  /*
-  async getAllTareas() {
-    const task = await this.taskRepository.findAll();
-    return task;
-  }*/
   async getTareaById(task_id, user_id) {
     return await this.taskRepository.findById(task_id, user_id);
   }
@@ -39,11 +29,9 @@ class TareasService {
   async getStatus() {
     return await this.taskRepository.findStatus();
   }
-
   async updateTarea(id, tarea, user_id) {
     return await this.taskRepository.update(id, tarea, user_id);
   }
-
   async deleteTarea(id, user_id) {
     return await this.taskRepository.delete(id, user_id);
   }

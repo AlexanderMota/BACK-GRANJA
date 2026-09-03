@@ -114,6 +114,20 @@ console.log("actualizarPassword(),perfilAct:", perfilAct);
     }
   }
  
+  deletePerfil = async (req, res) => {
+
+    try {
+      const user = req.user;
+
+      if (!user) return res.status(400).json({ error: 'Usuario no autenticado' });
+
+      const perfilAct = await this.perfilService.deletePerfil(user.user_id);
+
+      res.json({message: 'Perfil eliminado.', user: perfilAct});
+    } catch (error){
+      res.status(401).json({ error: error.message });
+    }
+  }
 }
 
 

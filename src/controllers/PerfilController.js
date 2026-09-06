@@ -28,8 +28,10 @@ class PerfilController {
 
       const avatar_url = req.file.filename;
 
-      await this.perfilService.updateAvatar( user.user_id, avatar_url );
-
+      const perservresp = await this.perfilService.updateAvatar( user.user_id, avatar_url );
+      
+      if(!perservresp) throw new Error("Error al actualizar el avatar");
+      
       res.json({
           message: "Avatar actualizado",
           user: {

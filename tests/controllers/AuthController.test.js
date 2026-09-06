@@ -26,7 +26,11 @@ describe('AuthController', () => {
         });
         
         mockRequest = { 
-            body: {}
+            body: {},
+            user: {
+                user_id: '123',
+                role: 'user'
+            }
         }; 
         mockResponse = { 
             cookie: jest.fn(),
@@ -93,10 +97,7 @@ describe('AuthController', () => {
     describe('getMe', () => {
 
         test('Debe devolver los datos del usuario cuando está autenticado', async () => { 
-            const user = { 
-                user_id: '123', 
-                role: 'user' 
-            }; 
+
             const userData = { 
                 user_id: '123', 
                 name: 'Alexander', 
@@ -105,10 +106,9 @@ describe('AuthController', () => {
                 email: 'alex@test.com', 
                 phone: '600000000', 
                 avatar_url: 'avatar.jpg', 
-                role: 'admin' 
+                role: 'user' 
             }; 
             
-            mockRequest.user = user; 
             mockAuthService.getMe.mockResolvedValue(userData); 
             
             await controller.getMe( mockRequest, mockResponse ); 
@@ -118,16 +118,7 @@ describe('AuthController', () => {
             expect(mockResponse.json).toHaveBeenCalledTimes(1); 
             expect(mockResponse.json).toHaveBeenCalledWith({ 
                 message: 'Usuario activo.', 
-                user: { 
-                    user_id: '123', 
-                    name: 'Alexander', 
-                    lastname: 'Mota', 
-                    username: 'alex', 
-                    email: 'alex@test.com', 
-                    phone: '600000000', 
-                    avatar_url: 'avatar.jpg', 
-                    role: 'user' 
-                } 
+                user: userData
             }); 
         }); 
         test('Debe devolver 401 cuando el usuario no está autenticado', async () => { 
@@ -144,13 +135,9 @@ describe('AuthController', () => {
             ); 
         }); 
         test('Debe devolver 406 cuando authService.getMe lanza un error', async () => { 
-            const user = { 
-                user_id: '123', 
-                role: 'user' 
-            }; 
+
             const error = new Error('Usuario no encontrado'); 
             
-            mockRequest.user = user; 
             mockAuthService.getMe.mockRejectedValue(error); 
             
             await controller.getMe( mockRequest, mockResponse ); 

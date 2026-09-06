@@ -42,8 +42,7 @@ class PerfilService {
 
     const updatedUser =  await this.userRepository.updateAvatar( user_id, avatar_url );
 
-
-    if (oldAvatar) {
+    if (oldAvatar && oldAvatar !== avatar_url && updatedUser[0].affectedRows > 0) {
 
         const oldPath = path.join(
             process.cwd(),
@@ -62,7 +61,7 @@ class PerfilService {
 
     }
 
-    return updatedUser;
+    return updatedUser[0].affectedRows > 0;
 
   }
   async actualizarPerfil(user_id, perfil){
@@ -88,7 +87,7 @@ class PerfilService {
     return await this.userRepository.updatePassword( user.user_id, user.password, await bcrypt.hash(newPassword, 10));
   }
 
-  async deleteAvatar(user_id){
+  async deleteAvatar(user_id) {
 
     const user = await this.getUserById(user_id);
 
@@ -96,7 +95,7 @@ class PerfilService {
         throw new Error("El usuario no tiene avatar");
     }
 
-     const filePath = path.join(
+    const filePath = path.join(
         process.cwd(),
         "uploads",
         "avatars",
@@ -106,21 +105,33 @@ class PerfilService {
     try {
 
         await fs.unlink(filePath);
-      
+
     } catch (err) {
 
-        console.warn("No se pudo eliminar el fichero: ", err.message);
+        console.warn(
+            "No se pudo eliminar el fichero:",
+            err.message
+        );
 
     }
 
-    const updatedUserRep = await this.userRepository.updateAvatar(user.user_id, null);
+    const updatedUserRep = await this.userRepository.updateAvatar(
+        user.user_id,
+        null
+    );
 
-    if(updatedUserRep.affectedRows > 0){
+    if (updatedUserRep[0].affectedRows > 0) {
 
-      user.avatar_url = null;
+        user.avatar_url = null;
 
-      return user;
-    }else throw new Error('Hubo un problema inesperado al intentar realizar el cambio de contraseña');
+        return user;
+
+    } else {
+
+        throw new Error(
+            'Hubo un problema inesperado al intentar eliminar el avatar'
+        );
+    }
   }
   async deleteProfile(user_id){
     return await this.userRepository.delete(user_id);

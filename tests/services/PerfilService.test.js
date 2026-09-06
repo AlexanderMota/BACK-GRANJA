@@ -195,7 +195,7 @@ describe('PerfilService', () => {
     }); 
     
     describe('updateAvatar', () => { 
-        test('Debe mandar los datos para actualizar y devolver el usuario con el avatar actualizado', async () => {
+        test('Debe mandar los datos para actualizar el avatar y devolver confirmación de que el avatar se ha actualizado', async () => {
             const user = { 
                 user_id:'123',
                 name: 'Alexander', 
@@ -204,19 +204,19 @@ describe('PerfilService', () => {
                 email: 'alex@test.com', 
                 avatar_url : 'url_del_avatar'
             }
-            const {avatar_url, ...userPre} = user;
+            const new_avatar_url = 'nueva_url_del_avatar';
 
-            mockUserRepository.findById.mockResolvedValue(userPre);
-            mockUserRepository.updateAvatar.mockResolvedValue(user);
+            mockUserRepository.findById.mockResolvedValue(user);
+            mockUserRepository.updateAvatar.mockResolvedValue([ { affectedRows: 1 } ]);
             
-            const result = await service.updateAvatar(user.user_id, avatar_url); 
+            const result = await service.updateAvatar(user.user_id, new_avatar_url); 
 
-            expect(result).toEqual(user);
+            expect(result).toEqual(true);
             expect(mockUserRepository.findById).toHaveBeenCalledTimes(1); 
             expect(mockUserRepository.findById).toHaveBeenCalledWith(user.user_id); 
             expect(mockUserRepository.updateAvatar).toHaveBeenCalledTimes(1); 
             expect(mockUserRepository.updateAvatar).toHaveBeenCalledWith( 
-                user.user_id, avatar_url
+                user.user_id, new_avatar_url
             ); 
         });
         test('Debe lanzar un error si no encuentra ningún usuario', async () => {
@@ -405,7 +405,7 @@ describe('PerfilService', () => {
  
             mockUnlink.mockResolvedValue(undefined);
             mockUserRepository.findById.mockResolvedValue(user); 
-            mockUserRepository.updateAvatar.mockResolvedValue({affectedRows : 1}); 
+            mockUserRepository.updateAvatar.mockResolvedValue([{affectedRows : 1}]); 
             
             const result = await service.deleteAvatar(user.user_id); 
 
@@ -430,11 +430,11 @@ describe('PerfilService', () => {
             
             mockUnlink.mockResolvedValue(undefined);
             mockUserRepository.findById.mockResolvedValue(user); 
-            mockUserRepository.updateAvatar.mockResolvedValue({affectedRows : 0}); 
+            mockUserRepository.updateAvatar.mockResolvedValue([{affectedRows : 0}]); 
 
             await expect(
                 service.deleteAvatar( user.user_id)
-            ).rejects.toThrow('Hubo un problema inesperado al intentar realizar el cambio de contraseña');
+            ).rejects.toThrow('Hubo un problema inesperado al intentar eliminar el avatar');
             expect(mockUserRepository.findById).toHaveBeenCalledTimes(1); 
             expect(mockUserRepository.findById).toHaveBeenCalledWith(user.user_id); 
             expect(mockUserRepository.updateAvatar).toHaveBeenCalledTimes(1); 
@@ -487,7 +487,7 @@ describe('PerfilService', () => {
             userSafe.avatar_url = null;
             
             mockUserRepository.findById.mockResolvedValue(user); 
-            mockUserRepository.updateAvatar.mockResolvedValue({affectedRows : 1}); 
+            mockUserRepository.updateAvatar.mockResolvedValue([{ affectedRows: 1 }]); 
             mockUnlink.mockRejectedValue(
                 new Error('Fichero no encontrado')
             );
@@ -503,7 +503,7 @@ describe('PerfilService', () => {
             expect(mockUserRepository.updateAvatar).toHaveBeenCalledWith(user.user_id, null); 
             expect(consoleWarnSpy).toHaveBeenCalledTimes(1);
             expect(consoleWarnSpy).toHaveBeenCalledWith(
-                'No se pudo eliminar el fichero: ',
+                'No se pudo eliminar el fichero:',
                 'Fichero no encontrado'
             );
             consoleWarnSpy.mockRestore();

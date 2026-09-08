@@ -42,7 +42,7 @@ class PerfilService {
 
     const updatedUser =  await this.userRepository.updateAvatar( user_id, avatar_url );
 
-    if (oldAvatar && oldAvatar !== avatar_url && updatedUser[0].affectedRows > 0) {
+    if (oldAvatar && oldAvatar !== avatar_url && updatedUser) {
 
         const oldPath = path.join(
             process.cwd(),
@@ -55,13 +55,21 @@ class PerfilService {
 
             await fs.unlink(oldPath);
 
-        } catch {
-            // Si no existe el archivo no pasa nada.
+        } catch (err){
+            // Si no existe el archivo, no pasa nada.
+            console.warn(
+              "No se pudo eliminar el fichero: ",
+              err.message
+            );
         }
 
     }
 
-    return updatedUser[0].affectedRows > 0;
+    if (!updatedUser) {
+        throw new Error("Hubo un problema inesperado al intentar actualizar el avatar");
+    }
+
+    return updatedUser;
 
   }
   async actualizarPerfil(user_id, perfil){

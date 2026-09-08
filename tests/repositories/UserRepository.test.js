@@ -206,7 +206,7 @@ describe('UserRepository', () => {
 
             const result = await repository.updateAvatar('123', '234');
 
-            expect(result[0].affectedRows).toBe(1);
+            expect(result).toEqual(true);
             expect(mockDBPool.query).toHaveBeenCalledTimes(1);
             expect(mockDBPool.query).toHaveBeenCalledWith(
                 expect.stringContaining('WHERE user_id = ?'),
@@ -221,7 +221,7 @@ describe('UserRepository', () => {
 
             const result = await repository.updateAvatar('234', '234');
 
-            expect(result[0].affectedRows).toBe(0);
+            expect(result).toEqual(false);
             expect(mockDBPool.query).toHaveBeenCalledTimes(1);
             expect(mockDBPool.query).toHaveBeenCalledWith(
                 expect.stringContaining('WHERE user_id = ?'),

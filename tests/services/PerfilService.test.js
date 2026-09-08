@@ -207,7 +207,7 @@ describe('PerfilService', () => {
             const new_avatar_url = 'nueva_url_del_avatar';
 
             mockUserRepository.findById.mockResolvedValue(user);
-            mockUserRepository.updateAvatar.mockResolvedValue([ { affectedRows: 1 } ]);
+            mockUserRepository.updateAvatar.mockResolvedValue(true);
             
             const result = await service.updateAvatar(user.user_id, new_avatar_url); 
 

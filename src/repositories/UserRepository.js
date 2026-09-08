@@ -117,7 +117,7 @@ class UserRepository {
   
   async updateAvatar(user_id, avatar_url) {
 
-    return await this.DBPool.query(`
+    const [result] = await this.DBPool.query(`
       UPDATE users 
       SET avatar_url = ? 
       WHERE user_id = ?
@@ -125,6 +125,7 @@ class UserRepository {
       [ avatar_url, user_id ]
     );
 
+    return result.affectedRows > 0;
     //return this.findById(user_id);
   }
   async updateProfile(user_id, profile){

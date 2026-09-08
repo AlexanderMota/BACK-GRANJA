@@ -53,7 +53,7 @@ class PerfilController {
 
       const perfil = await this.perfilService.getUserById(user.user_id);
 
-      res.json({message: 'Perfil encontrado.', user: perfil});
+      res.json({message: 'Perfil encontrado', user: perfil});
 
     } catch (error) {
       res.status(401).json({ error: error.message });
@@ -71,7 +71,7 @@ class PerfilController {
 
       const perfilAct = await this.perfilService.actualizarPerfil(user.user_id, perfil);
 
-      res.json({message: 'Perfil actualizado.', user: perfilAct});
+      res.json({message: 'Perfil actualizado', user: perfilAct});
 
     } catch (error){
       res.status(401).json({ error: error.message });
@@ -86,11 +86,12 @@ class PerfilController {
 
       const { password } = req.body;
 
-      if(password.newPassword == password.currentPassword) throw new error("La nueva contraseña es igual que la anterior");
+      if(password.newPassword == password.currentPassword) throw new Error("La nueva contraseña es igual que la anterior");
 
       const perfilAct = await this.perfilService.actualizarPassword(user.user_id,  password.currentPassword, password.newPassword);
 
-console.log("actualizarPassword(),perfilAct:", perfilAct);
+      if(!perfilAct) throw new Error("Tuvimos un problema al intentar actualizar la contraseña. Verifica que la contraseña actual sea correcta");
+
       res.json({message: 'Perfil actualizado.', user: user});
 
     } catch (error){
@@ -101,15 +102,14 @@ console.log("actualizarPassword(),perfilAct:", perfilAct);
   deleteFotoDePerfil = async (req, res) => {
 
     try {
-      const user = req.user;
       
-      if (!user) return res.status(400).json({ error: 'Usuario no autenticado' });
+      if (!req.user) return res.status(400).json({ error: 'Usuario no autenticado' });
 
+      const perfilAct = await this.perfilService.deleteAvatar(req.user.user_id);
 
-      const perfilAct = await this.perfilService.deleteAvatar(user.user_id);
+      if(!perfilAct) throw new Error("Tuvimos un problema al intentar eliminar la foto de perfil");
 
-
-      res.json({message: 'Perfil actualizado.', user: perfilAct});
+      res.json({message: 'Perfil actualizado.', user: {avatar_url: null}});
 
     } catch (error){
       res.status(401).json({ error: error.message });
@@ -119,13 +119,14 @@ console.log("actualizarPassword(),perfilAct:", perfilAct);
   deletePerfil = async (req, res) => {
 
     try {
-      const user = req.user;
 
-      if (!user) return res.status(400).json({ error: 'Usuario no autenticado' });
+      if (!req.user) return res.status(400).json({ error: 'Usuario no autenticado' });
 
-      const perfilAct = await this.perfilService.deletePerfil(user.user_id);
+      const perfilAct = await this.perfilService.deletePerfil(req.user.user_id);
 
-      res.json({message: 'Perfil eliminado.', user: perfilAct});
+      if(!perfilAct) throw new Error("Tuvimos un problema al intentar eliminar el perfil");
+
+      res.json({message: 'Perfil eliminado.', user: {}});
     } catch (error){
       res.status(401).json({ error: error.message });
     }

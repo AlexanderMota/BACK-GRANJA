@@ -1,13 +1,6 @@
 import multer from "multer";
 import path from "path";
 import fs from "fs";
-/*import path from "path";
-
-const uploadDir = path.join(
-    process.cwd(),
-    "uploads",
-    "avatars"
-);*/
 
 const uploadDir = "uploads/avatars";
 

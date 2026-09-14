@@ -1,5 +1,5 @@
 
-class TareasRepository {
+class TaskRepository {
   constructor({ DBPool }) {
     this.DBPool = DBPool;
   }
@@ -138,11 +138,11 @@ class TareasRepository {
   async findByOwnerId(owner_id) {
     const [rows] = await this.DBPool.query('SELECT * FROM tasks WHERE created_by = ?', [owner_id]);
     return rows.length ? rows[0] : null;
-  }*/
+  }
   async findByParentId(parent_id) {
     const [rows] = await this.DBPool.query('SELECT * FROM tasks WHERE parent_task_id = ?', [parent_id]);
     return rows.length ? rows[0] : null;
-  }
+  }*/
 
   async findPriorities() {
     const [rows] = await this.DBPool.query("SHOW COLUMNS FROM tasks LIKE 'priority'");
@@ -199,5 +199,5 @@ class TareasRepository {
   }
 }
 
-export default TareasRepository;
+export default TaskRepository;
 

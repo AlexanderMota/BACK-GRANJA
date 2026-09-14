@@ -425,62 +425,7 @@ describe('TaskRepository', () => {
         });
     });
 
-    
-    describe('findByParentId', () => {
 
-        test('Debe devolver las subtareas de una tarea específica', async () => {
-
-            const tasks = [
-                {
-                    task_id: '1',
-                    name: 'tarea mock nueva',
-                    description: 'descripción de la tarea mock nueva',
-                    status: null,
-                    priority: null,
-                    parent_task_id: null,
-                    created_by: '123',
-                    visibility: 'public'
-                },
-                {
-                    task_id: '2',
-                    name: 'subtarea mock nueva',
-                    description: 'descripción de la subtarea mock nueva',
-                    status: null,
-                    priority: null,
-                    parent_task_id: '1',
-                    created_by: '123',
-                    visibility: 'public'
-                }
-            ];
-
-            mockDBPool.query.mockResolvedValue([[tasks[1]]]);
-
-            const result = await repository.findByParentId(tasks[0].task_id);
-
-            expect(result).toEqual(tasks[1]);
-
-            expect(mockDBPool.query).toHaveBeenCalledTimes(1);
-
-            expect(mockDBPool.query).toHaveBeenCalledWith(
-                expect.stringContaining('WHERE parent_task_id = ?'),
-                ['1']
-            );
-        });
-        test('Debe devolver null si no hay ninguna subtarea asociada a la tarea', async () => {
-
-            mockDBPool.query.mockResolvedValue([
-                []
-            ]);
-
-            const result = await repository.findByParentId('2');
-
-            expect(result).toEqual(null);
-
-        });
-
-    });
-
-    
     describe('findPriorities', () => {
 
         test('Debe devolver las prioridades disponibles', async () => {

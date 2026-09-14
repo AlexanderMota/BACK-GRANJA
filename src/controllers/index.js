@@ -1,7 +1,7 @@
 import AuthController from './AuthController.js';
-import PerfilController from './PerfilController.js';
-import TareasController from './TareasController.js';
+import ProfileController from './ProfileController.js';
+import TaskController from './TaskController.js';
 import CommentsController from './CommentsController.js';
 import CollaboratorsController from './CollabsController.js';
 
-export { AuthController, PerfilController, TareasController, CommentsController, CollaboratorsController };
+export { AuthController, ProfileController, TaskController, CommentsController, CollaboratorsController };

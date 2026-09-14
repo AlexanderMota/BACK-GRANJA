@@ -6,17 +6,17 @@ import app from './server.js';
 import { DBPool } from './config/index.js';
 
 // routers
-import { AuthRoutes, PerfilRoutes, TareasRoutes, CollaboratorsRoutes } from './routes/index.js';
+import { AuthRoutes, ProfileRoutes, TareasRoutes, CollaboratorsRoutes } from './routes/index.js';
 import routes from './routes/routes.js';
 
 // controladores
-import { AuthController, PerfilController, TareasController, CommentsController, CollaboratorsController } from './controllers/index.js';
+import { AuthController, ProfileController, TaskController, CommentsController, CollaboratorsController } from './controllers/index.js';
 
 // servicios
-import { AuthService, PerfilService, TareasService, CommentsService, CollaboratorsService } from './services/index.js';
+import { AuthService, ProfileService, TaskService, CommentsService, CollaboratorsService } from './services/index.js';
 
 // repositorios
-import { UserRepository, TareasRepository, CommentsRepository, CollaboratorsRepository } from './repositories/index.js';
+import { UserRepository, TaskRepository, CommentsRepository, CollaboratorsRepository } from './repositories/index.js';
 
 // modelos
 //import {User, Tarea} from './models/index.js';
@@ -39,7 +39,7 @@ container.register({
 // Registrar Rutas
 container.register({
   AuthRoutes: asFunction(AuthRoutes).singleton(),
-  PerfilRoutes: asFunction(PerfilRoutes).singleton(),
+  ProfileRoutes: asFunction(ProfileRoutes).singleton(),
   TareasRoutes: asFunction(TareasRoutes).singleton(),
   CollaboratorsRoutes: asFunction(CollaboratorsRoutes).singleton()
 });
@@ -47,8 +47,8 @@ container.register({
 // Registrar Controladores
 container.register({
   AuthController: asClass(AuthController).singleton(),
-  PerfilController: asClass(PerfilController).singleton(),
-  TareasController: asClass(TareasController).singleton(),
+  ProfileController: asClass(ProfileController).singleton(),
+  TaskController: asClass(TaskController).singleton(),
   CommentsController: asClass(CommentsController).singleton(),
   CollaboratorsController: asClass(CollaboratorsController).singleton()
 });
@@ -56,8 +56,8 @@ container.register({
 // Registrar Servicios
 container.register({
   AuthService: asClass(AuthService).singleton(),
-  PerfilService: asClass(PerfilService).singleton(),
-  TareasService: asClass(TareasService).singleton(),
+  ProfileService: asClass(ProfileService).singleton(),
+  TaskService: asClass(TaskService).singleton(),
   CommentsService: asClass(CommentsService).singleton(),
   CollaboratorsService: asClass(CollaboratorsService).singleton()
 });
@@ -65,7 +65,7 @@ container.register({
 // Registrar Repositorios
 container.register({
   UserRepository: asClass(UserRepository).singleton(),
-  TareasRepository: asClass(TareasRepository).singleton(),
+  TaskRepository: asClass(TaskRepository).singleton(),
   CommentsRepository: asClass(CommentsRepository).singleton(),
   CollaboratorsRepository: asClass(CollaboratorsRepository).singleton()
 });

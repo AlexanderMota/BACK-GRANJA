@@ -1,8 +1,8 @@
 class AuthController {
   
-  constructor({ AuthService, PerfilService }) {
+  constructor({ AuthService, ProfileService }) {
     this.authService = AuthService;
-    this.perfilService = PerfilService;
+    this.perfilService = ProfileService;
   }
 
   crearPerfil = async (req, res) => {

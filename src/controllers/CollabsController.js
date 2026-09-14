@@ -1,7 +1,7 @@
 class CollaboratorsController {
 
-  constructor({ PerfilService, CollaboratorsService }) {
-    this.perfilService = PerfilService;
+  constructor({ ProfileService, CollaboratorsService }) {
+    this.perfilService = ProfileService;
     this.collabsService = CollaboratorsService;
   }
 

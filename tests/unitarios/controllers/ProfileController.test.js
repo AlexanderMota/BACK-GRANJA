@@ -1,7 +1,7 @@
 import {jest} from '@jest/globals';
-import { PerfilController } from '../../../src/controllers/index.js';
+import { ProfileController } from '../../../src/controllers/index.js';
 
-describe('PerfilController', () => {    
+describe('ProfileController', () => {    
     
     let controller;
     let mockPerfilService;
@@ -21,8 +21,8 @@ describe('PerfilController', () => {
         };
 
 
-        controller = new PerfilController({
-            PerfilService: mockPerfilService
+        controller = new ProfileController({
+            ProfileService: mockPerfilService
         });
         
         mockRequest = { 
@@ -204,7 +204,7 @@ describe('PerfilController', () => {
         test('Debe actualizar el perfil del usuario y devolver el perfil actualizado', async () => {
 
             const newPerfil = { 
-                user_id: '126', 
+                user_id: '123', 
                 name: 'JuanNew', 
                 lastname: 'MotaNew', 
                 username: 'Juananew', 

@@ -22,7 +22,7 @@ describe('AuthController', () => {
 
         controller = new AuthController({
             AuthService: mockAuthService,
-            PerfilService: mockPerfilService
+            ProfileService: mockPerfilService
         });
         
         mockRequest = { 

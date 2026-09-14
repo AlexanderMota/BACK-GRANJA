@@ -1,6 +1,6 @@
-class TareasController {
-  constructor({ TareasService }) {
-    this.tareasService = TareasService;
+class TaskController {
+  constructor({ TaskService }) {
+    this.tareasService = TaskService;
   }
 
   createTarea = async (req, res) => {
@@ -183,5 +183,5 @@ class TareasController {
   }
 }
 
-export default TareasController;
+export default TaskController;
   

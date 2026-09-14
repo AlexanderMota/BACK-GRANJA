@@ -1,6 +1,6 @@
-class PerfilController {
-  constructor({ PerfilService }) {
-    this.perfilService = PerfilService;
+class ProfileController {
+  constructor({ ProfileService }) {
+    this.profileService = ProfileService;
   }
 
   searchUsers = async (req, res) => {
@@ -12,7 +12,7 @@ class PerfilController {
       const { query } = req.params;
       const { task_id } = req.query;
 
-      const usersResult = await this.perfilService.searchUsers( query, user.user_id, task_id );
+      const usersResult = await this.profileService.searchUsers( query, user.user_id, task_id );
 
       res.json({message: `Perfiles encontrados (${usersResult.length})`, users: usersResult});
     }catch (error) {
@@ -28,9 +28,9 @@ class PerfilController {
 
       const avatar_url = req.file.filename;
 
-      const perservresp = await this.perfilService.updateAvatar( user.user_id, avatar_url );
+      const profileservresp = await this.profileService.updateAvatar( user.user_id, avatar_url );
       
-      if(!perservresp) throw new Error("Error al actualizar el avatar");
+      if(!profileservresp) throw new Error("Error al actualizar el avatar");
       
       res.json({
           message: "Avatar actualizado",
@@ -51,9 +51,9 @@ class PerfilController {
 
       if (!user) return res.status(400).json({ error: 'Usuario no autenticado' });
 
-      const perfil = await this.perfilService.getUserById(user.user_id);
+      const profile = await this.profileService.getUserById(user.user_id);
 
-      res.json({message: 'Perfil encontrado', user: perfil});
+      res.json({message: 'Perfil encontrado', user: profile});
 
     } catch (error) {
       res.status(401).json({ error: error.message });
@@ -69,9 +69,9 @@ class PerfilController {
 
       const { perfil } = req.body;
 
-      const perfilAct = await this.perfilService.actualizarPerfil(user.user_id, perfil);
+      const profileAct = await this.profileService.actualizarPerfil(user.user_id, perfil);
 
-      res.json({message: 'Perfil actualizado', user: perfilAct});
+      res.json({message: 'Perfil actualizado', user: profileAct});
 
     } catch (error){
       res.status(401).json({ error: error.message });
@@ -88,9 +88,9 @@ class PerfilController {
 
       if(password.newPassword == password.currentPassword) throw new Error("La nueva contraseña es igual que la anterior");
 
-      const perfilAct = await this.perfilService.actualizarPassword(user.user_id,  password.currentPassword, password.newPassword);
+      const profileAct = await this.profileService.actualizarPassword(user.user_id,  password.currentPassword, password.newPassword);
 
-      if(!perfilAct) throw new Error("Tuvimos un problema al intentar actualizar la contraseña. Verifica que la contraseña actual sea correcta");
+      if(!profileAct) throw new Error("Tuvimos un problema al intentar actualizar la contraseña. Verifica que la contraseña actual sea correcta");
 
       res.json({message: 'Perfil actualizado.', user: user});
 
@@ -105,9 +105,9 @@ class PerfilController {
       
       if (!req.user) return res.status(400).json({ error: 'Usuario no autenticado' });
 
-      const perfilAct = await this.perfilService.deleteAvatar(req.user.user_id);
+      const profileAct = await this.profileService.deleteAvatar(req.user.user_id);
 
-      if(!perfilAct) throw new Error("Tuvimos un problema al intentar eliminar la foto de perfil");
+      if(!profileAct) throw new Error("Tuvimos un problema al intentar eliminar la foto de perfil");
 
       res.json({message: 'Perfil actualizado.', user: {avatar_url: null}});
 
@@ -122,9 +122,9 @@ class PerfilController {
 
       if (!req.user) return res.status(400).json({ error: 'Usuario no autenticado' });
 
-      const perfilAct = await this.perfilService.deletePerfil(req.user.user_id);
+      const profileAct = await this.profileService.deletePerfil(req.user.user_id);
 
-      if(!perfilAct) throw new Error("Tuvimos un problema al intentar eliminar el perfil");
+      if(!profileAct) throw new Error("Tuvimos un problema al intentar eliminar el perfil");
 
       res.json({message: 'Perfil eliminado.', user: {}});
     } catch (error){
@@ -134,5 +134,5 @@ class PerfilController {
 }
 
 
-export default PerfilController;
+export default ProfileController;
   

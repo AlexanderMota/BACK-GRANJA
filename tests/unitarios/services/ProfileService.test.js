@@ -16,11 +16,11 @@ jest.unstable_mockModule('fs/promises', () => ({
     } 
 }));
 
-const { default: PerfilService } = await import(
-    '../../../src/services/PerfilService.js'
+const { default: ProfileService } = await import(
+    '../../../src/services/ProfileService.js'
 ); 
 
-describe('PerfilService', () => { 
+describe('ProfileService', () => { 
     
     let service; 
     let mockUserRepository; 
@@ -37,7 +37,7 @@ describe('PerfilService', () => {
             delete: jest.fn()
         }; 
         
-        service = new PerfilService({ 
+        service = new ProfileService({ 
             UserRepository: mockUserRepository 
         }); 
         

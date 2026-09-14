@@ -1,6 +1,6 @@
-class TareasService {
-  constructor({ TareasRepository }) {
-    this.taskRepository = TareasRepository;
+class TasksService {
+  constructor({ TaskRepository }) {
+    this.taskRepository = TaskRepository;
   }
   async createTarea(task) {
     return await this.taskRepository.create(task);
@@ -37,4 +37,4 @@ class TareasService {
   }
 }
 
-export default TareasService;
+export default TasksService;

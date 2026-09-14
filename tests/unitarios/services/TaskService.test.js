@@ -1,8 +1,8 @@
 import { jest } from '@jest/globals';
 
-const { default: TareasService } = await import('../../../src/services/TareasService.js');
+const { default: TaskService } = await import('../../../src/services/TaskService');
 
-describe('TareasService', () => {
+describe('TaskService', () => {
 
     let service;
     let mockTareasRepository;
@@ -25,8 +25,8 @@ describe('TareasService', () => {
         };
 
 
-        service = new TareasService({
-            TareasRepository: mockTareasRepository
+        service = new TaskService({
+            TaskRepository: mockTareasRepository
         });
 
     });

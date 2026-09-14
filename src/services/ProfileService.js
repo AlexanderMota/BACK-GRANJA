@@ -3,7 +3,7 @@ import bcrypt from 'bcrypt';
 import fs from "fs/promises";
 import path from "path";
 
-class PerfilService {
+class ProfileService {
 
   constructor({ UserRepository }) {
     this.userRepository = UserRepository;
@@ -146,4 +146,4 @@ class PerfilService {
   }
 }
 
-export default PerfilService;
+export default ProfileService;

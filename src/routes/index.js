@@ -1,6 +1,6 @@
 import AuthRoutes from './Auth.Routes.js';
-import PerfilRoutes from './Perfil.Routes.js';
-import TareasRoutes from './Tareas.Routes.js';
+import ProfileRoutes from './Profile.Routes.js';
+import TareasRoutes from './Task.Routes.js';
 import CollaboratorsRoutes from './Collabs.Routes.js';
 
-export { AuthRoutes, PerfilRoutes, TareasRoutes, CollaboratorsRoutes };
+export { AuthRoutes, ProfileRoutes, TareasRoutes, CollaboratorsRoutes };

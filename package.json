@@ -9,7 +9,9 @@
     "dev": "nodemon index.js",
     "test": "cross-env NODE_OPTIONS=--experimental-vm-modules jest",
     "test:watch": "cross-env NODE_OPTIONS=--experimental-vm-modules jest --watch",
-    "test:coverage": "cross-env NODE_OPTIONS=--experimental-vm-modules jest --coverage"
+    "test:coverage": "cross-env NODE_OPTIONS=--experimental-vm-modules jest --coverage",
+    "test:unit": "cross-env NODE_OPTIONS=--experimental-vm-modules jest tests/unitarios",
+    "test:integration": "cross-env NODE_OPTIONS=--experimental-vm-modules jest tests/integracion --setupFiles=./tests/integracion/setup.js"
   },
   "repository": {
     "type": "git",

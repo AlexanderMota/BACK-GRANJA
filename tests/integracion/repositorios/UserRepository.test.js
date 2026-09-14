@@ -1,5 +1,5 @@
-import UserRepository from '../../src/repositories/UserRepository.js';
-import { DBPool } from '../../src/config/dbconnection.js';
+import UserRepository from '../../../src/repositories/UserRepository.js';
+import { DBPool } from '../../../src/config/dbconnection.js';
 
 const userRepository = new UserRepository({
     DBPool
@@ -15,7 +15,7 @@ const createTestUser = (suffix) => ({
     password: 'password_test'
 });
 
-describe('UserRepository - Integración', () => {
+describe('UserRepository', () => {
 
     afterAll(async () => {
         await DBPool.end();

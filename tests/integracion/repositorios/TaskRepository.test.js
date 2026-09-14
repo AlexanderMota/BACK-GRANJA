@@ -1,5 +1,5 @@
-import TaskRepository from '../../src/repositories/TaskRepository.js';
-import { DBPool } from '../../src/config/dbconnection.js';
+import TaskRepository from '../../../src/repositories/TaskRepository.js';
+import { DBPool } from '../../../src/config/dbconnection.js';
 
 const taskRepository = new TaskRepository({
     DBPool
@@ -56,7 +56,7 @@ const insertTestUser = async (user) => {
 };
 
 
-describe('TaskRepository - Integración', () => {
+describe('TaskRepository', () => {
 
     afterAll(async () => {
         await DBPool.end();

@@ -430,7 +430,7 @@ describe('ProfileService', () => {
             
             mockUnlink.mockResolvedValue(undefined);
             mockUserRepository.findById.mockResolvedValue(user); 
-            mockUserRepository.updateAvatar.mockResolvedValue([{affectedRows : 0}]); 
+            mockUserRepository.updateAvatar.mockResolvedValue(false); 
 
             await expect(
                 service.deleteAvatar( user.user_id)

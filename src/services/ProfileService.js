@@ -128,7 +128,7 @@ class ProfileService {
         null
     );
 
-    if (updatedUserRep[0].affectedRows > 0) {
+    if (updatedUserRep) {
 
         user.avatar_url = null;
 

@@ -1,5 +1,5 @@
 import { jest } from '@jest/globals';
-import UserRepository from '../../src/repositories/UserRepository.js';
+import UserRepository from '../../../src/repositories/UserRepository.js';
 
 
 describe('UserRepository', () => {

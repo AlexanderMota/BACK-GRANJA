@@ -7,7 +7,7 @@ jest.unstable_mockModule('jsonwebtoken', () => ({
     }
 }));
 
-const { default: AuthService } = await import('../../src/services/AuthService.js');
+const { default: AuthService } = await import('../../../src/services/AuthService.js');
 
 describe('AuthService', () => {
 

@@ -1,5 +1,5 @@
 import {jest} from '@jest/globals';
-import { PerfilController } from '../../src/controllers/index.js';
+import { PerfilController } from '../../../src/controllers/index.js';
 
 describe('PerfilController', () => {    
     

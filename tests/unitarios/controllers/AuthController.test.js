@@ -1,5 +1,5 @@
 import { jest } from '@jest/globals';
-import AuthController from '../../src/controllers/AuthController.js';
+import AuthController from '../../../src/controllers/AuthController.js';
 
 describe('AuthController', () => {
 

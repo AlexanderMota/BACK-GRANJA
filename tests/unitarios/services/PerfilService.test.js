@@ -17,7 +17,7 @@ jest.unstable_mockModule('fs/promises', () => ({
 }));
 
 const { default: PerfilService } = await import(
-    '../../src/services/PerfilService.js'
+    '../../../src/services/PerfilService.js'
 ); 
 
 describe('PerfilService', () => { 

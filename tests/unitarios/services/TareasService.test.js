@@ -1,6 +1,6 @@
 import { jest } from '@jest/globals';
 
-const { default: TareasService } = await import('../../src/services/TareasService.js');
+const { default: TareasService } = await import('../../../src/services/TareasService.js');
 
 describe('TareasService', () => {
 

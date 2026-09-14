@@ -38,7 +38,7 @@ jest.unstable_mockModule('path', () => ({
 }));
 
 const { uploadAvatar } = await import(
-    '../../src/middlewares/UploadAvatar.js'
+    '../../../src/middlewares/UploadAvatar.js'
 );
 
 describe('uploadAvatar', () => {

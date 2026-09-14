@@ -1,5 +1,5 @@
 import { jest } from '@jest/globals';
-import TaskRepository from '../../src/repositories/TaskRepository.js';
+import TaskRepository from '../../../src/repositories/TaskRepository.js';
 
 
 describe('TaskRepository', () => {

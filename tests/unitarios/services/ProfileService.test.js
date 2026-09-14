@@ -58,9 +58,9 @@ describe('ProfileService', () => {
             const hashedPassword = 'password_hasheada'; 
             
             mockBcryptHash.mockResolvedValue(hashedPassword); 
-            mockUserRepository.register.mockResolvedValue(42); 
+            mockUserRepository.register.mockResolvedValue(user); 
             
-            const result = await service.crearPerfil(user); 
+            const result = await service.createProfile(user); 
             
             expect(mockBcryptHash).toHaveBeenCalledTimes(1); 
             expect(mockBcryptHash).toHaveBeenCalledWith('contraseña123', 10); 
@@ -79,7 +79,7 @@ describe('ProfileService', () => {
             
             expect(registeredUser.user_id).toBeDefined(); 
             expect(registeredUser.user_id).not.toBe(''); 
-            expect(result).toBe(42); 
+            expect(result).toBe(user); 
         
         }); 
             
@@ -96,7 +96,7 @@ describe('ProfileService', () => {
             
             mockUserRepository.register.mockResolvedValue(42); 
             
-            await service.crearPerfil(user); 
+            await service.createProfile(user); 
             
             expect(mockUserRepository.register).toHaveBeenCalledWith( 
                 expect.objectContaining({ 

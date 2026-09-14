@@ -26,7 +26,7 @@ class UserRepository {
         5
       ]
     );
-    return result.insertId;
+    return user;
   }
 
   async findByEmail(email) {

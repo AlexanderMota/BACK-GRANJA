@@ -9,7 +9,7 @@ class ProfileService {
     this.userRepository = UserRepository;
   }
 
-  async crearPerfil(user) {
+  async createProfile(user) {
 
     user.user_id = randomUUID();
     user.password = await bcrypt.hash(user.password, 10);

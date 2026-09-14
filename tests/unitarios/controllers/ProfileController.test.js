@@ -17,7 +17,7 @@ describe('ProfileController', () => {
             actualizarPerfil: jest.fn(),
             actualizarPassword: jest.fn(),
             deleteAvatar: jest.fn(),
-            deletePerfil: jest.fn()
+            deleteProfile: jest.fn()
         };
 
 
@@ -348,16 +348,16 @@ describe('ProfileController', () => {
         });
     });
 
-    describe('deletePerfil', () => {   
+    describe('deleteProfile', () => {   
 
         test('Debe devolver un response si el perfil se elimina correctamente', async () => {
             
-            mockPerfilService.deletePerfil.mockResolvedValue(true);
+            mockPerfilService.deleteProfile.mockResolvedValue(true);
             
-            await controller.deletePerfil(mockRequest, mockResponse);
+            await controller.deleteProfile(mockRequest, mockResponse);
             
-            expect(mockPerfilService.deletePerfil).toHaveBeenCalledTimes(1);
-            expect(mockPerfilService.deletePerfil).toHaveBeenCalledWith(mockRequest.user.user_id);
+            expect(mockPerfilService.deleteProfile).toHaveBeenCalledTimes(1);
+            expect(mockPerfilService.deleteProfile).toHaveBeenCalledWith(mockRequest.user.user_id);
             expect(mockResponse.json).toHaveBeenCalledTimes(1);
             expect(mockResponse.json).toHaveBeenCalledWith({
                 message: 'Perfil eliminado.', 
@@ -367,9 +367,9 @@ describe('ProfileController', () => {
         });
         test('Debe devolver 401 si se produce algún error eliminando el perfil', async () => {
             
-            mockPerfilService.deletePerfil.mockResolvedValue(false);
+            mockPerfilService.deleteProfile.mockResolvedValue(false);
             
-            await controller.deletePerfil(mockRequest, mockResponse);
+            await controller.deleteProfile(mockRequest, mockResponse);
 
             expect(mockResponse.status).toHaveBeenCalledTimes(1);
             expect(mockResponse.status).toHaveBeenCalledWith(401);
@@ -382,7 +382,7 @@ describe('ProfileController', () => {
             
             mockRequest.user = null; 
             
-            await controller.deletePerfil(mockRequest, mockResponse);
+            await controller.deleteProfile(mockRequest, mockResponse);
 
             expect(mockResponse.status).toHaveBeenCalledTimes(1);
             expect(mockResponse.status).toHaveBeenCalledWith(400);

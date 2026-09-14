@@ -116,13 +116,13 @@ class ProfileController {
     }
   }
  
-  deletePerfil = async (req, res) => {
+  deleteProfile = async (req, res) => {
 
     try {
 
       if (!req.user) return res.status(400).json({ error: 'Usuario no autenticado' });
 
-      const profileAct = await this.profileService.deletePerfil(req.user.user_id);
+      const profileAct = await this.profileService.deleteProfile(req.user.user_id);
 
       if(!profileAct) throw new Error("Tuvimos un problema al intentar eliminar el perfil");
 

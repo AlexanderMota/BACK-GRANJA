@@ -5,10 +5,11 @@ class AuthController {
     this.perfilService = ProfileService;
   }
 
-  crearPerfil = async (req, res) => {
+  createProfile = async (req, res) => {
     try {
       const { user } = req.body;
-      const newUser = await this.perfilService.crearPerfil(user);
+      const newUser = await this.perfilService.createProfile(user);
+
       res.status(201).json({ message: 'Perfil creado.', user: newUser });
     } catch (error) {
       res.status(400).json({ error: error.message });

@@ -14,7 +14,7 @@ export default ({ ProfileController }) => {
   router.put('/password', authMiddleware, (req, res) => ProfileController.actualizarPassword(req, res));
 
   router.delete('/avatar', authMiddleware, (req, res) => ProfileController.deleteFotoDePerfil(req, res));
-  router.delete('/', authMiddleware, (req, res) => ProfileController.deletePerfil(req, res));
+  router.delete('/', authMiddleware, (req, res) => ProfileController.deleteProfile(req, res));
 
   return router;
 };

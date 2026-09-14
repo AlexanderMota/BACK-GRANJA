@@ -21,40 +21,40 @@ describe('UserRepository', () => {
 
     describe('register', () => {
 
-        test('Debe registrar un usuario y devolver su insertId', async () => {
+        test('Debe registrar un usuario y devolverlo', async () => {
 
-            const newUser = {
-                user_id: '123',
-                name: null,
-                lastname: null,
-                username: null,
-                email: 'alex@test.com',
-                phone: null,
-                password: 'password123'
-            };
+    const newUser = {
+        user_id: '123',
+        name: null,
+        lastname: null,
+        username: 'alexnick',
+        email: 'alex@test.com',
+        phone: null,
+        password: 'password123'
+    };
 
-            mockDBPool.query.mockResolvedValue([
-                { insertId: 42 }
-            ]);
+    mockDBPool.query.mockResolvedValue([{}]);
 
-            const result = await repository.register(newUser);
+    const result = await repository.register(newUser);
 
-            expect(result).toBe(42);
-            expect(mockDBPool.query).toHaveBeenCalledTimes(1);
-            expect(mockDBPool.query).toHaveBeenCalledWith(
-                expect.stringContaining('INSERT INTO users'),
-                [
-                    '123',
-                    null,
-                    null,
-                    null,
-                    'alex@test.com',
-                    null,
-                    'password123',
-                    5
-                ]
-            );
-        });
+    expect(result).toBe(newUser);
+
+    expect(mockDBPool.query).toHaveBeenCalledTimes(1);
+
+    expect(mockDBPool.query).toHaveBeenCalledWith(
+        expect.stringContaining('INSERT INTO users'),
+        [
+            '123',
+            null,
+            null,
+            'alexnick',
+            'alex@test.com',
+            null,
+            'password123',
+            5
+        ]
+    );
+});
         test('Debe propagar el error si falla el registro', async () => {
 
             const newUser = {

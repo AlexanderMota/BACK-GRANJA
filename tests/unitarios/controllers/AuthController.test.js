@@ -16,7 +16,7 @@ describe('AuthController', () => {
             login: jest.fn()
         };
         mockPerfilService = {
-            crearPerfil: jest.fn()
+            createProfile: jest.fn()
         };
 
 
@@ -40,7 +40,7 @@ describe('AuthController', () => {
         };
     });
 
-    describe('crearPerfil', () => {
+    describe('createProfile', () => {
 
         test('Debe crear el perfil y devolver status 201 con el usuario creado', async () => {
 
@@ -54,12 +54,12 @@ describe('AuthController', () => {
             const newUser = '123'; 
 
             mockRequest.body = { user }; 
-            mockPerfilService.crearPerfil.mockResolvedValue(newUser); 
+            mockPerfilService.createProfile.mockResolvedValue(newUser); 
 
-            await controller.crearPerfil( mockRequest, mockResponse );
+            await controller.createProfile( mockRequest, mockResponse );
 
-            expect(mockPerfilService.crearPerfil).toHaveBeenCalledTimes(1); 
-            expect(mockPerfilService.crearPerfil).toHaveBeenCalledWith(user); 
+            expect(mockPerfilService.createProfile).toHaveBeenCalledTimes(1); 
+            expect(mockPerfilService.createProfile).toHaveBeenCalledWith(user); 
             expect(mockResponse.status).toHaveBeenCalledTimes(1); 
             expect(mockResponse.status).toHaveBeenCalledWith(201); 
             expect(mockResponse.json).toHaveBeenCalledTimes(1); 
@@ -79,12 +79,12 @@ describe('AuthController', () => {
             }; 
             const error = new Error('Error al crear el perfil'); 
             mockRequest.body = { user }; 
-            mockPerfilService.crearPerfil.mockRejectedValue(error); 
+            mockPerfilService.createProfile.mockRejectedValue(error); 
             
-            await controller.crearPerfil( mockRequest, mockResponse ); 
+            await controller.createProfile( mockRequest, mockResponse ); 
             
-            expect(mockPerfilService.crearPerfil).toHaveBeenCalledTimes(1); 
-            expect(mockPerfilService.crearPerfil).toHaveBeenCalledWith(user); 
+            expect(mockPerfilService.createProfile).toHaveBeenCalledTimes(1); 
+            expect(mockPerfilService.createProfile).toHaveBeenCalledWith(user); 
             expect(mockResponse.status).toHaveBeenCalledTimes(1); 
             expect(mockResponse.status).toHaveBeenCalledWith(400); 
             expect(mockResponse.json).toHaveBeenCalledTimes(1); 
